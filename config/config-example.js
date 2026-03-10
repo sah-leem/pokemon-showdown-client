@@ -21,6 +21,7 @@ Config.whitelist = [
 Config.defaultserver = {
 	id: 'showdown',
 	host: 'api.mmoshowdown.cc',
+	protocol: 'wss',
 	port: 443,
 	httpport: 80,
 	altport: 80,
