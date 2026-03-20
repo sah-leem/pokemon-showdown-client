@@ -574,7 +574,7 @@ abstract class BattleTypedSearch<T extends SearchType> {
 
 	protected formatType: 'doubles' | 'bdsp' | 'bdspdoubles' | 'rs' | 'bw1' | 'letsgo' | 'metronome' | 'natdex' | 'nfe' |
 		'ssdlc1' | 'ssdlc1doubles' | 'predlc' | 'predlcdoubles' | 'predlcnatdex' | 'svdlc1' | 'svdlc1doubles' |
-		'svdlc1natdex' | 'stadium' | 'lc' | 'legendsza' | null = null;
+		'svdlc1natdex' | 'stadium' | 'lc' | 'legendsza' | 'pokemmolc' | null = null;
 	isDoubles = false;
 
 	/**
@@ -695,6 +695,9 @@ abstract class BattleTypedSearch<T extends SearchType> {
 			format = format.slice(3) as ID;
 			this.formatType = 'nfe';
 			if (!format) format = 'ou' as ID;
+		}
+		if (format.includes('pokemmolc') && !format.includes('pokemmolcsv')) {
+			this.formatType = 'pokemmolc' as any;
 		}
 		if ((format.endsWith('lc') || format.startsWith('lc')) && format !== 'caplc' && !this.formatType) {
 			this.formatType = 'lc';
@@ -1046,6 +1049,8 @@ class BattlePokemonSearch extends BattleTypedSearch<'pokemon'> {
 			table = table[`gen${dex.gen}nfe`];
 		} else if (this.formatType === 'lc') {
 			table = table[`gen${dex.gen}lc`];
+		} else if (this.formatType === 'pokemmolc') {
+			table = table['pokemmolc'];
 		} else if (this.formatType?.startsWith('ssdlc1')) {
 			if (this.formatType.includes('doubles')) {
 				table = table['gen8dlc1doubles'];
@@ -1120,6 +1125,8 @@ class BattlePokemonSearch extends BattleTypedSearch<'pokemon'> {
 		else if (format === 'pu') tierSet = tierSet.slice(slices.PU || slices.NU);
 		else if (format === 'zu' && dex.gen === 5) tierSet = tierSet.slice(slices.PU || slices.NU);
 		else if (format === 'zu') tierSet = tierSet.slice(slices.ZU || slices.PU || slices.NU);
+		else if (this.formatType === 'pokemmolc') {
+		}
 		else if (
 			format === 'lc' || format === 'lcuu' || format.startsWith('lc') || (format !== 'caplc' && format.endsWith('lc'))
 		) tierSet = tierSet.slice(slices.LC);
