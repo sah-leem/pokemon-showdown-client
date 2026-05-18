@@ -574,7 +574,7 @@ abstract class BattleTypedSearch<T extends SearchType> {
 
 	protected formatType: 'doubles' | 'bdsp' | 'bdspdoubles' | 'rs' | 'bw1' | 'letsgo' | 'metronome' | 'natdex' | 'nfe' |
 		'ssdlc1' | 'ssdlc1doubles' | 'predlc' | 'predlcdoubles' | 'predlcnatdex' | 'svdlc1' | 'svdlc1doubles' |
-		'svdlc1natdex' | 'stadium' | 'lc' | 'legendsza' | 'pokemmolc' | null = null;
+		'svdlc1natdex' | 'stadium' | 'lc' | 'legendsza' | 'pokemmolc' | 'pokemmo' | null = null;
 	isDoubles = false;
 
 	/**
@@ -698,6 +698,10 @@ abstract class BattleTypedSearch<T extends SearchType> {
 		}
 		if (format.includes('pokemmolc') && !format.includes('pokemmolcsv')) {
 			this.formatType = 'pokemmolc' as any;
+			this.dex = Dex.mod('gen5pokemmo' as ID);
+		} else if (format.includes('pokemmo')) {
+			this.formatType = 'pokemmo';
+			this.dex = Dex.mod('gen5pokemmo' as ID);
 		}
 		if ((format.endsWith('lc') || format.startsWith('lc')) && format !== 'caplc' && !this.formatType) {
 			this.formatType = 'lc';
@@ -880,6 +884,9 @@ abstract class BattleTypedSearch<T extends SearchType> {
 			if (this.formatType === 'rs') table = table['gen3rs'];
 			if (this.formatType === 'legendsza') table = table['gen9legendsou'];
 			let learnset = table.learnsets[learnsetid];
+			if (this.formatType === 'pokemmo' && table['pokemmo']?.learnsets?.[learnsetid]) {
+				learnset = table['pokemmo'].learnsets[learnsetid];
+			}
 			const eggMovesOnly = this.eggMovesOnly(learnsetid, speciesid);
 			if (learnset && (moveid in learnset) && (!this.format.startsWith('tradebacks') ? learnset[moveid].includes(genChar) :
 				learnset[moveid].includes(genChar) || (learnset[moveid].includes(`${gen + 1}`) && move.gen === gen)) &&
@@ -916,6 +923,8 @@ abstract class BattleTypedSearch<T extends SearchType> {
 			this.formatType === 'natdex' ? `gen${gen}natdex` :
 			this.formatType === 'stadium' ? `gen${gen}stadium${gen > 1 ? gen : ''}` :
 			this.formatType === 'legendsza' ? `gen9legendsou` :
+			this.formatType === 'pokemmo' ? 'pokemmo' :
+			this.formatType === 'pokemmolc' ? 'pokemmolc' :
 			`gen${gen}`;
 		if (table?.[tableKey]) {
 			table = table[tableKey];
@@ -1051,6 +1060,25 @@ class BattlePokemonSearch extends BattleTypedSearch<'pokemon'> {
 			table = table[`gen${dex.gen}lc`];
 		} else if (this.formatType === 'pokemmolc') {
 			table = table['pokemmolc'];
+		} else if (this.formatType === 'pokemmo') {
+			table = table['pokemmo'];
+			if (!table.tierSet) {
+				table.tierSet = table.tiers.map((r: any) => {
+					if (typeof r === 'string') return ['pokemon', r];
+					return [r[0], r[1]];
+				});
+				table.tiers = null;
+			}
+			let tierSet: SearchRow[] = table.tierSet;
+			const slices = table.formatSlices;
+			const format = this.format;
+			if (format.includes('nu')) {
+				tierSet = tierSet.slice(slices['NU']);
+			} else if (format.includes('uu')) {
+				tierSet = tierSet.slice(slices['UU']);
+			}
+			// OU shows everything (OU + UU + NU + UT)
+			return tierSet;
 		} else if (this.formatType?.startsWith('ssdlc1')) {
 			if (this.formatType.includes('doubles')) {
 				table = table['gen8dlc1doubles'];
@@ -1404,6 +1432,8 @@ class BattleItemSearch extends BattleTypedSearch<'item'> {
 			table = table[`gen${this.dex.gen}metronome`];
 		} else if (this.formatType === 'legendsza') {
 			table = table[`gen9legendsou`];
+			} else if (this.formatType === 'pokemmo' || this.formatType === 'pokemmolc') {
+				table = table['pokemmo'];
 		} else if (this.dex.gen < 9) {
 			table = table[`gen${this.dex.gen}`];
 		}
@@ -1792,6 +1822,9 @@ class BattleMoveSearch extends BattleTypedSearch<'move'> {
 		if (this.formatType?.startsWith('svdlc1')) lsetTable = lsetTable['gen9dlc1'];
 		while (learnsetid) {
 			let learnset = lsetTable.learnsets[learnsetid];
+				if (this.formatType === 'pokemmo' && lsetTable['pokemmo']?.learnsets?.[learnsetid]) {
+					learnset = lsetTable['pokemmo'].learnsets[learnsetid];
+				}
 			if (learnset) {
 				for (let moveid in learnset) {
 					let learnsetEntry = learnset[moveid];

@@ -14,8 +14,8 @@
 		},
 		initialize: function () {
 			// April Fool's 2016 - Digimon Showdown
-			// this.$el.html('<img class="logo" src="' + Dex.resourcePrefix + 'sprites/afd/digimonshowdown.png" alt="Digimon Showdown! (beta)" width="146" height="44" /><div class="maintabbarbottom"></div><div class="tabbar maintabbar"><div class="inner"></div></div><div class="userbar"></div>');
-			this.$el.html('<img class="logo" src="' + Dex.resourcePrefix + 'pokemonshowdownbeta.png" srcset="' + Dex.resourcePrefix + 'pokemonshowdownbeta@2x.png 2x" alt="Pok&eacute;mon Showdown! (beta)" width="146" height="44" /><div class="maintabbarbottom"></div><div class="tabbar maintabbar"><div class="inner"></div></div><div class="userbar"></div>');
+			// this.$el.html('<img class="logo" src="' + Dex.resourcePrefix + 'sprites/afd/digimonshowdown.png" alt="Digimon Showdown! (beta)" width="146" height="38" style="display:block;margin:auto;margin-top:8px;" /><div class="maintabbarbottom"></div><div class="tabbar maintabbar"><div class="inner"></div></div><div class="userbar"></div>');
+			this.$el.html('<img class="logo" src="pokemonshowdownbeta.png?v=2" srcset="' + 'pokemonshowdownbeta@2x.png?v=2 2x" alt="Pok&eacute;mon Showdown! (beta)" width="146" height="38" style="display:block;margin:auto;margin-top:8px;" /><div class="maintabbarbottom"></div><div class="tabbar maintabbar"><div class="inner"></div></div><div class="userbar"></div>');
 			this.$tabbar = this.$('.maintabbar .inner');
 			// this.$sidetabbar = this.$('.sidetabbar');
 			this.$userbar = this.$('.userbar');
@@ -36,7 +36,7 @@
 			if (!app.user.loaded) {
 				buf = '<button disabled class="button">Loading...</button>';
 			} else if (app.user.get('named')) {
-				buf = '<span class="username" data-name="' + BattleLog.escapeHTML(name) + '"' + (away ? ' data-away="true"' : '') + (status ? 'data-status="' + BattleLog.escapeHTML(status) + '"' : '') + ' style="' + color + '"><i class="fa fa-user" style="color:' + (away ? '#888;' : '#779EC5') + '"></i> <span class="usernametext">' + BattleLog.escapeHTML(name) + '</span></span>';
+				buf = '<span class="username" data-name="' + BattleLog.escapeHTML(name) + '"' + (away ? ' data-away="true"' : '') + (status ? 'data-status="' + BattleLog.escapeHTML(status) + '"' : '') + ' style="' + color + '"><i class="fa fa-user" style="color:' + (away ? '#888;' : '#779EC5') + '"></i> <span class="usernametext">' + BattleLog.escapeHTML(name) + '</span></span> <button class="button" name="smogonLogout" style="font-size:12px;padding:2px 8px;color:#e07060;" title="Logout"><i class="fa fa-sign-out"></i> Logout</button>';
 			} else {
 				buf = '<button name="login" class="button">Choose name</button>';
 			}
@@ -46,6 +46,11 @@
 		login: function () {
 			app.addPopup(LoginPopup);
 		},
+			smogonLogout: function () {
+				if (window.SmogonOAuth) SmogonOAuth.clearToken();
+				try { localStorage.removeItem('ps-smogon-name'); } catch (e) {}
+				app.user.logout();
+			},
 		openSounds: function () {
 			app.addPopup(SoundsPopup);
 		},
@@ -837,11 +842,16 @@
 			buf += '<p><strong>Official</strong></p>';
 			buf += '<div class="bglist">';
 
-			buf += '<button name="setBg" value="charizards" class="option' + (cur === 'charizards' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 0) + 'px"></span>Charizards</button>';
-			buf += '<button name="setBg" value="horizon" class="option' + (cur === 'horizon' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 1) + 'px"></span>Horizon</button>';
-			buf += '<button name="setBg" value="ocean" class="option' + (cur === 'ocean' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 3) + 'px"></span>Ocean</button>';
-			buf += '<button name="setBg" value="shaymin" class="option' + (cur === 'shaymin' ? ' cur' : '') + '"><span class="bg" style="background-position:0 -' + (90 * 4) + 'px"></span>Shaymin</button>';
-			buf += '<button name="setBg" value="solidblue" class="option' + (cur === 'solidblue' ? ' cur' : '') + '"><span class="bg" style="background: #344b6c"></span>Solid blue</button>';
+			buf += '<button name="setBg" value="absol" class="option' + (cur === 'absol' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-absol.jpg) center/cover no-repeat"></span>Absol</button>';
+			buf += '<button name="setBg" value="celebi" class="option' + (cur === 'celebi' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-celebi.jpg) center/cover no-repeat"></span>Celebi</button>';
+			buf += '<button name="setBg" value="heatrotom" class="option' + (cur === 'heatrotom' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-heatrotom.jpg) center/cover no-repeat"></span>Heat Rotom</button>';
+			buf += '<button name="setBg" value="jirachi" class="option' + (cur === 'jirachi' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-jirachi.jpg) center/cover no-repeat"></span>Jirachi</button>';
+			buf += '<button name="setBg" value="manaphy" class="option' + (cur === 'manaphy' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-manaphy.jpg) center/cover no-repeat"></span>Manaphy</button>';
+			buf += '<button name="setBg" value="oshawott" class="option' + (cur === 'oshawott' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-oshawott.jpg) center/cover no-repeat"></span>Oshawott</button>';
+			buf += '<button name="setBg" value="popplio" class="option' + (cur === 'popplio' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-popplio.jpg) center/cover no-repeat"></span>Popplio</button>';
+			buf += '<button name="setBg" value="smoochum" class="option' + (cur === 'smoochum' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-smoochum.jpg) center/cover no-repeat"></span>Smoochum</button>';
+			buf += '<button name="setBg" value="victini" class="option' + (cur === 'victini' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-victini.jpg) center/cover no-repeat"></span>Victini</button>';
+			buf += '<button name="setBg" value="washrotom" class="option' + (cur === 'washrotom' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-washrotom.jpg) center/cover no-repeat"></span>Wash Rotom</button>';
 
 			buf += '</div><div style="clear:left"></div>';
 			buf += '<p><strong>Custom</strong></p>';
@@ -905,64 +915,32 @@
 		}
 	});
 
-	var LoginPopup = this.LoginPopup = Popup.extend({
-		type: 'semimodal',
-		initialize: function (data) {
-			var buf = '<form>';
+        var LoginPopup = this.LoginPopup = Popup.extend({
+                type: 'semimodal',
+                initialize: function (data) {
+                        var buf = '<form>';
 
-			if (data.error) {
-				buf += '<p class="error">' + BattleLog.escapeHTML(data.error) + '</p>';
-				if (data.error.indexOf('inappropriate') >= 0) {
-					// log out so we don't autologin to a bad name if we refresh
-					$.post(app.user.getActionPHP(), {
-						act: 'logout',
-						userid: app.user.get('userid')
-					});
+                        if (data.error) {
+                                buf += '<p class="error">' + BattleLog.escapeHTML(data.error) + '</p>';
+                        } else if (data.reason) {
+                                buf += '<p>' + BattleLog.parseMessage(data.reason) + '</p>';
+                        }
 
-					buf += '<p>Keep in mind these rules:</p>';
-					buf += '<ol>';
-					buf += '<li>Usernames may not impersonate a recognized user (a user with %, @, #, or & next to their name).</li>';
-					buf += '<li>Usernames may not be derogatory or insulting in nature, to an individual or group (insulting yourself is okay as long as it\'s not too serious).</li>';
-					buf += '<li>Usernames may not directly reference sexual activity, or be excessively disgusting.</li>';
-					buf += '</ol>';
-				}
-			} else if (data.reason) {
-				buf += '<p>' + BattleLog.parseMessage(data.reason) + '</p>';
-			} else if (!data.force) {
-				var noRenameGames = '';
-				if (app.rooms[''].games) {
-					for (var roomid in app.rooms[''].games) {
-						var title = app.rooms[''].games[roomid];
-						if (title.slice(-1) === '*') {
-							noRenameGames += '<li>' + BattleLog.escapeHTML(title.slice(0, -1)) + '</li>';
-						}
-					}
-				}
-				if (noRenameGames) {
-					buf += '<p>You can\'t change name in the middle of these games:</p>';
-					buf += '<ul>' + noRenameGames + '</ul>';
-					buf += '<p class="buttonbar"><button type="button" name="force" class="button"><small style="color:red">Forfeit and change name</small></button></p>';
-					buf += '<p class="buttonbar"><button type="submit" autofocus class="button"><strong>Cancel</strong></button></p>';
-					buf += '</form>';
-					this.$el.html(buf);
-					return;
-				}
-			}
+                        buf += '<h3 style="margin-top:0; font-size:14px">Log in with Smogon</h3>';
+                        buf += '<p style="font-size:12px;margin:6px 0">mmoshowdown.cc uses Pokémon Showdown accounts. Log in with your Smogon account to play.</p>';
+                        buf += '<p style="color:#888;font-size:11px">Don\'t have one? Head to <a href="https://play.pokemonshowdown.com" target="_blank" rel="noopener">play.pokemonshowdown.com</a> to register.</p>';
+                        buf += '<p class="buttonbar"><button type="button" name="smogonOAuth" class="button"><i class="fa fa-sign-in"></i> <strong>Login with Smogon</strong></button> <button type="button" name="close" class="button">Cancel</button></p>';
+                        buf += '</form>';
 
-			var name = (data.name || '');
-			if (!name && app.user.get('named')) name = app.user.get('name');
-			buf += '<p><label class="label">Username: <small class="preview" style="' + BattleLog.hashColor(toUserid(name)) + '">(color)</small><input class="textbox autofocus" type="text" name="username" value="' + BattleLog.escapeHTML(name) + '" autocomplete="username"></label></p>';
-			if (name) {
-				buf += '<p><small>(Others will be able to see your name change. To change name privately, use "Log out")</small></p>';
-			}
-			buf += '<p class="buttonbar"><button type="submit" class="button"><strong>Choose name</strong></button> <button type="button" name="close" class="button">Cancel</button></p>';
-
-			buf += '</form>';
-			this.$el.html(buf);
+                        this.$el.html(buf);
 		},
 		events: {
-			'input .textbox': 'updateColor'
-		},
+                        'click button[name=smogonOAuth]': 'smogonOAuth'
+                },
+                smogonOAuth: function () {
+                        this.close();
+                        if (window.SmogonOAuth) SmogonOAuth.login();
+                },
 		updateColor: function (e) {
 			var name = e.currentTarget.value;
 			var preview = this.$('.preview');

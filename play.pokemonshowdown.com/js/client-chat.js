@@ -2085,15 +2085,15 @@
 		initialize: function () {
 			this.$el.addClass('ps-room-light').addClass('scrollable');
 			var buf = '<div class="pad">';
-			buf += '<h2>PS! Informational Resources</h2><hr />';
-			buf += 'PS! is a wide and varied site, with more facets than can be covered here easily.<br />';
-			buf += 'While this page chiefly documents the ever-shifting set of commands available to PS! users, here are some useful resources for newcomers:<br />';
-			buf += '- <a href="https://www.smogon.com/forums/threads/3676132/">Beginner\'s Guide to Pok&eacute;mon Showdown</a><br />';
-			buf += '- <a href="https://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pok&eacute;mon</a><br />';
-			buf += '- <a href="https://www.smogon.com/sm/articles/sm_tiers">What do \'OU\', \'UU\', etc mean?</a><br />';
-			buf += '- <a href="https://www.smogon.com/dex/ss/formats/">What are the rules for each format?</a><br />';
-			buf += '- <a href="https://www.smogon.com/ss/articles/clauses">What is \'Sleep Clause\' and other clauses?</a><br />';
-			buf += '- <a href="https://www.smogon.com/articles/getting-started">Next Steps for Competitive Battling</a><br />';
+			buf += '<h2>PokeMMO Showdown Resources</h2><hr />';
+			buf += 'Welcome to PokeMMO Showdown! Here are some useful resources to help you get started with competitive PokeMMO battling:<br />';
+			
+			buf += '- <a href="https://dex.mmoshowdown.cc/">PokeMMO Pok&eacute;dex</a><br />';
+			buf += '- <a href="https://calc.mmoshowdown.cc/">PokeMMO Damage Calculator</a><br />';
+			buf += '- <a href="https://forums.pokemmo.com/">PokeMMO Forums</a><br />';
+			buf += '- <a href="https://mmoshowdown.cc/rules">PokeMMO Showdown Rules</a><br />';
+			buf += '- <a href="https://discord.gg/tWXGCtud4m">Join our Discord</a><br />';
+			buf += '- <a href="https://replay.mmoshowdown.cc/">Watch Replays</a><br />';
 			buf += '- <button class="button" name="send" value="/report">Report a user</button><br />';
 			buf += '- <button class="button" name="send" value="/join help">Join the Help room for live help</button>';
 			buf += '<hr /><strong>Commands:</strong><br />';

@@ -56,6 +56,7 @@
 			buf += '<p><button class="button mainmenu2" name="joinRoom" value="teambuilder">Teambuilder</button></p>';
 			buf += '<p><button class="button mainmenu3" name="joinRoom" value="ladder">Ladder</button></p>';
 			buf += '<p><button class="button mainmenu4" name="send" value="/smogtours">Tournaments</button></p>';
+				buf += '<p><button class="button mainmenu4" name="send" value="/join view-changelog">Changelog</button></p>';
 			buf += '</div>';
 
 			buf += '<div class="menugroup"><p><button class="button mainmenu4 onlineonly disabled" name="joinRoom" value="battles">Watch a battle</button></p>';

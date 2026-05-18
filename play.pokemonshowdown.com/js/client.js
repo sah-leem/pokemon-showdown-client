@@ -328,19 +328,44 @@ function toId() {
 		},
 		challstr: '',
 		receiveChallstr: function (challstr) {
-			if (challstr) {
-				/**
-				 * Rename the user based on the `sid` and `showdown_username` cookies.
-				 * Specifically, if the user has a valid session, the user will be
-				 * renamed to the username associated with that session. If the user
-				 * does not have a valid session but does have a persistent username
-				 * (i.e. a `showdown_username` cookie), the user will be renamed to
-				 * that name; if that name is registered, the user will be required
-				 * to authenticate.
-				 *
-				 * See `finishRename` above for a list of events this can emit.
-				 */
-				this.challstr = challstr;
+                        if (challstr) {
+                                this.challstr = challstr;
+				// Safety: if login hasn't completed in 15s, show guest UI
+				var self = this;
+				setTimeout(function () {
+					if (!self.loaded) {
+						self.loaded = true;
+						app.topbar.updateUserbar();
+					}
+				}, 15000);
+
+                                // --- Smogon OAuth: handle popup redirect landing on this page ---
+                                if (window.SmogonOAuth) {
+                                        var redirectAssertion = SmogonOAuth.consumeRedirectParams();
+                                        if (redirectAssertion) {
+                                                SmogonOAuth._finishLoginWithAssertion(redirectAssertion);
+                                                this.loaded = true;
+                                                return;
+                                        }
+                                }
+
+                                // --- Smogon OAuth: silent auto-login with stored token ---
+                                var self = this;
+                                if (window.SmogonOAuth) {
+                                        SmogonOAuth.tryAutoLogin(challstr, function (assertion) {
+                                                if (assertion) {
+                                                        SmogonOAuth._finishLoginWithAssertion(assertion, SmogonOAuth.getStoredName());
+                                                        self.loaded = true;
+                                                } else {
+                                                        self._upkeep();
+                                                }
+                                        });
+                                        return;
+                                }
+                                this._upkeep();
+                        }
+                },
+                _upkeep: function () {
 				var self = this;
 				$.post(this.getActionPHP(), {
 					act: 'upkeep',
@@ -362,8 +387,11 @@ function toId() {
 						});
 					}
 					self.finishRename(data.username, data.assertion);
-				}), 'text');
-			}
+				}), 'text').fail(function () {
+					self.loaded = true;
+					app.topbar.updateUserbar();
+				});
+			
 		},
 		/**
 		 * Log out from the server (but remain connected as a guest).
@@ -373,6 +401,7 @@ function toId() {
 				act: 'logout',
 				userid: this.get('userid')
 			});
+			if (window.SmogonOAuth) SmogonOAuth.clearToken();
 			app.send('/logout');
 			app.trigger('init:socketclosed', "You have been logged out and disconnected.<br /><br />If you wanted to change your name while staying connected, use the 'Change Name' button or the '/nick' command.", false);
 			app.socket.close();
@@ -474,7 +503,7 @@ function toId() {
 				var muted = Dex.prefs('mute');
 				BattleSound.setMute(muted);
 
-				var theme = Dex.prefs('theme');
+				var theme = Dex.prefs('theme') || 'dark';
 				var colorSchemeQuery = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');
 				var dark = theme === 'dark' || (theme === 'system' && colorSchemeQuery && colorSchemeQuery.matches);
 				$('html').toggleClass('dark', dark);
@@ -541,6 +570,13 @@ function toId() {
 				$('.battle-log-add').html('<small>You are disconnected and cannot chat.</small>');
 
 				self.reconnectPending = (message || true);
+					// Auto-reconnect after 5 seconds
+					setTimeout(function () {
+						if (self.reconnectPending) {
+							var reconnectBtn = document.querySelector('button[name=reconnect]');
+							if (reconnectBtn) reconnectBtn.click();
+						}
+					}, 5000);
 				if (!self.popups.length) self.addPopup(ReconnectPopup, { message: message });
 			});
 

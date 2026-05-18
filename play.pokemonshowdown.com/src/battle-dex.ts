@@ -283,6 +283,9 @@ export const Dex = new class implements ModdedDex {
 		if (dex.gen === 9 && formatid.includes('legends')) {
 			dex = Dex.mod('gen9legendsou' as ID);
 		}
+		if (formatid.includes('pokemmo')) {
+			dex = Dex.mod('gen5pokemmo' as ID);
+		}
 		return dex;
 	}
 

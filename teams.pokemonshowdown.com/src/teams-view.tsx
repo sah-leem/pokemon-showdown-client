@@ -280,7 +280,7 @@ export class TeamViewer extends preact.Component<PageProps> {
 				Owner: <strong style={{ color: BattleLog.usernameColor(ownerid as any) }}>{ownerid}</strong><br />
 				Format: {format}<br />
 				Views: {views}<br />
-				<label>Shortlink: </label><a href={`https://psim.us/t/${link}`}>https://psim.us/t/{link}</a><br />
+				<label>Shortlink: </label><a href={`https://mmosim.site/t/${link}`}>https://mmosim.site/t/{link}</a><br />
 				<hr />
 				<div name="manage" style={{ display: 'flex', gap: '5px' }}>
 					{loggedin === this.state.team.ownerid ?

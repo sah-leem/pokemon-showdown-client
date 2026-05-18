@@ -35,6 +35,7 @@ Storage.bg = {
 	MENU_BUTTONS: 7,
 	set: function (bgUrl, bgid, noSave) {
 		if (!this.load(bgUrl, bgid)) {
+			if (!bgUrl && this.resolvedUrl) { bgUrl = this.resolvedUrl; bgid = this.id; }
 			this.extractMenuColors(bgUrl, bgid, noSave);
 		} else if (bgid) {
 			try {
@@ -55,8 +56,8 @@ Storage.bg = {
 		if (!bgid) {
 			if (location.host === 'smogtours.psim.us') {
 				bgid = 'shaymin';
-			} else if (location.host === Config.routes.client || bgid === 'waterfall') {
-				var bgs = ['horizon', 'ocean', 'shaymin', 'charizards', 'psday'];
+			} else if (location.host === Config.routes.client || location.host === 'mmoshowdown.cc' || bgid === 'waterfall') {
+				var bgs = ['absol', 'celebi', 'heatrotom', 'jirachi', 'manaphy', 'oshawott', 'popplio', 'smoochum', 'victini', 'washrotom'];
 				bgid = bgs[Math.floor(Math.random() * bgs.length)];
 			} else {
 				$(document.body).css({
@@ -67,6 +68,8 @@ Storage.bg = {
 				return true;
 			}
 			bgUrl = Dex.resourcePrefix + 'fx/client-bg-' + bgid + '.jpg';
+			this.id = bgid;
+			this.resolvedUrl = bgUrl;
 		}
 
 		// April Fool's 2016 - Digimon theme
@@ -90,28 +93,36 @@ Storage.bg = {
 
 		if (!hues) {
 			switch (bgid) {
-			case 'horizon':
-				hues = ["318.87640449438203,35.177865612648226%", "216,46.2962962962963%", "221.25,32.25806451612904%", "197.8021978021978,52.60115606936417%", "232.00000000000003,19.480519480519483%", "228.38709677419354,60.7843137254902%"];
-				attrib = '<a href="https://vtas.deviantart.com/art/Pokemon-Horizon-312267168" target="_blank" class="subtle">"Horizon" <small>background by Vivian Zou</small></a>';
+			case 'absol':
+				attrib = '"Absol" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
-			case 'ocean':
-				hues = ["82.8169014084507,34.63414634146342%", "216.16438356164383,29.55465587044534%", "212.92682926829266,59.42028985507245%", "209.18918918918916,57.51295336787566%", "199.2857142857143,48.275862068965495%", "213.11999999999998,55.06607929515419%"];
-				attrib = '<a href="https://quanyails.deviantart.com/art/Sunrise-Ocean-402667154" target="_blank" class="subtle">"Sunrise Ocean" <small>background by Quanyails</small></a>';
+			case 'celebi':
+				attrib = '"Celebi" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
-			case 'shaymin':
-				hues = ["39.000000000000064,21.7391304347826%", "170.00000000000003,2.380952380952378%", "157.5,11.88118811881188%", "174.78260869565216,12.041884816753928%", "185.00000000000003,12.76595744680851%", "20,5.660377358490567%"];
-				attrib = '<a href="http://cargocollective.com/bluep" target="_blank" class="subtle">"Shaymin" <small>background by Daniel Kong</small></a>';
+			case 'heatrotom':
+				attrib = '"Heat Rotom" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
-			case 'charizards':
-				hues = ["37.159090909090914,74.57627118644066%", "10.874999999999998,70.79646017699115%", "179.51612903225808,52.10084033613446%", "20.833333333333336,36.73469387755102%", "192.3076923076923,80.41237113402063%", "210,29.629629629629633%"];
-				attrib = '<a href="https://lit.link/en/seiryuuden" target="_blank" class="subtle">"Charizards" <small>background by Jessica Valencia</small></a>';
+			case 'jirachi':
+				attrib = '"Jirachi" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
-			case 'psday':
-				hues = ["24.705882352941174,25.37313432835821%", "260.4651162790697,59.44700460829492%", "165.3191489361702,46.07843137254901%", "16.363636363636367,42.63565891472869%", "259.04761904761904,34.05405405405405%", "24.705882352941174,25.37313432835821%"];
-				attrib = 'Pok&eacute;mon Showdown Day background <small>by LifeisDANK</small>';
+			case 'manaphy':
+				attrib = '"Manaphy" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
-			case 'digimon':
-				hues = ["170.45454545454544,27.500000000000004%", "84.70588235294119,13.821138211382115%", "112.50000000000001,7.8431372549019605%", "217.82608695652175,54.761904761904766%", "0,1.6949152542372816%", ""];
+			case 'oshawott':
+				attrib = '"Oshawott" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'popplio':
+				attrib = '"Popplio" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'smoochum':
+				attrib = '"Smoochum" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'victini':
+				attrib = '"Victini" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'washrotom':
+				attrib = '"Wash Rotom" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
 			}
 		}
 		if (attrib) attrib = '<small style="display:block;padding-bottom:4px">' + attrib + '</small>';
@@ -170,6 +181,7 @@ Storage.bg = {
 				}
 			} catch (e) {}
 		};
+		img.crossOrigin = 'anonymous';
 		img.src = bgUrl;
 	},
 	getHueSat: function (r, g, b) {
@@ -202,7 +214,7 @@ try {
 } catch (e) {}
 
 if (!Storage.bg.id) {
-	Storage.bg.load();
+	Storage.bg.set('', '', true);
 }
 
 /*********************************************************

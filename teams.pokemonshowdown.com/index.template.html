@@ -4,10 +4,13 @@
 
 <title>Teams - Pok&eacute;mon Showdown!</title>
 
-<link rel="stylesheet" href="//pokemonshowdown.com/style/global.css" />
-<link rel="stylesheet" href="//play.pokemonshowdown.com/style/font-awesome.css" />
-<link rel="stylesheet" href="//play.pokemonshowdown.com/style/battle.css" />
-<link rel="stylesheet" href="//play.pokemonshowdown.com/style/utilichart.css" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/global.css" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/main.css" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/mmoshowdown-nav.css" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/mmoshowdown-teams-replay-theme.css" />
+<link rel="stylesheet" href="/font-awesome.css" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/battle.css" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/utilichart.css" />
 
 <style>
 	@media (max-width:820px) {
@@ -181,14 +184,19 @@
 <div>
 
 	<header>
-		<div class="nav-wrapper"><ul class="nav">
-			<li><a class="button nav-first" href="https://pokemonshowdown.com/"><img src="https://pokemonshowdown.com/images/pokemonshowdownbeta.png" srcset="https://pokemonshowdown.com/images/pokemonshowdownbeta.png 1x, https://pokemonshowdown.com/images/pokemonshowdownbeta@2x.png 2x" alt="Pok&eacute;mon Showdown" width="146" height="44" /> Home</a></li>
-			<li><a class="button" href="https://pokemonshowdown.com/dex/">Pok&eacute;dex</a></li>
-			<li><a class="button" href="#">Replay</a></li>
-			<li><a class="button purplebutton" href="https://smogon.com/dex/" target="_blank">Strategy</a></li>
-			<li><a class="button nav-last purplebutton" href="https://smogon.com/forums/" target="_blank">Forum</a></li>
-			<li><a class="button greenbutton nav-first nav-last" href="https://play.pokemonshowdown.com/">Play</a></li>
-		</ul></div>
+		<div class="nav-bar">
+			<a href="//mmoshowdown.cc/"><img src="//dex.mmoshowdown.cc/images/pokemonshowdownbeta.png" srcset="//dex.mmoshowdown.cc/images/pokemonshowdownbeta.png 1x, //dex.mmoshowdown.cc/images/pokemonshowdownbeta@2x.png 2x" alt="MMO Showdown" width="146" height="44" /></a>
+			<ul class="nav">
+                                        <li><a class="button" href="https://mmoshowdown.com/">Home</a></li>
+					<li><a class="button" href="//dex.mmoshowdown.cc/">Pok&eacute;dex</a></li>
+					<li><a class="button" href="//replay.mmoshowdown.cc/">Replays</a></li>
+					<li><a class="button cur" href="//teams.mmoshowdown.cc/">Teams</a></li>
+					<li><a class="button" href="https://calc.mmoshowdown.cc/">Calculator</a></li>
+					<li><a class="button" href="https://forums.pokemmo.com/" target="_blank">Forums</a></li>
+					<li><a class="button nav-last purplebutton" href="https://discord.gg/tWXGCtud4m" target="_blank">Discord</a></li>
+                                        <li><a class="button greenbutton" href="https://mmoshowdown.cc/">Play</a></li>
+			</ul>
+		</div>
 	</header>
 
 	<div class="main" id="main">
@@ -199,28 +207,28 @@
 
 </div>
 
-<script nomodule src="//play.pokemonshowdown.com/js/lib/ps-polyfill.js?"></script>
-<script src="//play.pokemonshowdown.com/js/lib/preact.min.js?"></script>
-<script src="//play.pokemonshowdown.com/config/config.js?"></script>
-<script src="//play.pokemonshowdown.com/js/battledata.js?"></script>
-<script src="//play.pokemonshowdown.com/js/battle-dex-data.js?"></script>
-<script src="//play.pokemonshowdown.com/js/battle-dex.js?"></script>
+<script nomodule src="//mmoshowdown.cc/js/lib/ps-polyfill.js?"></script>
+<script src="//mmoshowdown.cc/js/lib/preact.min.js?"></script>
+<script src="//mmoshowdown.cc/config/config.js?"></script>
+<script src="//mmoshowdown.cc/js/battledata.js?"></script>
+<script src="//mmoshowdown.cc/js/battle-dex-data.js?"></script>
+<script src="//mmoshowdown.cc/js/battle-dex.js?"></script>
 
-<script src="//play.pokemonshowdown.com/data/pokedex.js?"></script>
-<script src="//play.pokemonshowdown.com/data/moves.js?"></script>
-<script src="//play.pokemonshowdown.com/data/items.js?"></script>
-<script src="//play.pokemonshowdown.com/data/abilities.js?"></script>
-<script src="//play.pokemonshowdown.com/data/pokedex-mini.js?"></script>
+<script src="//mmoshowdown.cc/data/pokedex.js?"></script>
+<script src="//mmoshowdown.cc/data/moves.js?"></script>
+<script src="//mmoshowdown.cc/data/items.js?"></script>
+<script src="//mmoshowdown.cc/data/abilities.js?"></script>
+<script src="//mmoshowdown.cc/data/pokedex-mini.js?"></script>
 
-<script src="//play.pokemonshowdown.com/data/aliases.js?" async></script>
+<script src="//mmoshowdown.cc/data/aliases.js?" async></script>
 
-<script src="//play.pokemonshowdown.com/src/battle-log-misc.js?"></script>
-<script src="//play.pokemonshowdown.com/js/battle-log.js?"></script>
-<script src="//play.pokemonshowdown.com/js/battle.js?"></script>
+<script src="//mmoshowdown.cc/src/battle-log-misc.js?"></script>
+<script src="//mmoshowdown.cc/js/battle-log.js?"></script>
+<script src="//mmoshowdown.cc/js/battle.js?"></script>
 
-<script src="//teams.pokemonshowdown.com/js/utils.js?"></script>
-<script> Net.defaultRoute = location.protocol + '//teams.pokemonshowdown.com'; </script>
-<script src="//teams.pokemonshowdown.com/js/teams-view.js?"></script>
-<script src="//teams.pokemonshowdown.com/js/teams-search.js?"></script>
-<script src="//teams.pokemonshowdown.com/js/teams-index.js?"></script>
-<script src="//teams.pokemonshowdown.com/js/teams.js?"></script>
+<script src="//teams.mmoshowdown.cc/js/utils.js?"></script>
+<script> Net.defaultRoute = location.protocol + '//teams.mmoshowdown.cc'; </script>
+<script src="//teams.mmoshowdown.cc/js/teams-view.js?"></script>
+<script src="//teams.mmoshowdown.cc/js/teams-search.js?"></script>
+<script src="//teams.mmoshowdown.cc/js/teams-index.js?"></script>
+<script src="//teams.mmoshowdown.cc/js/teams.js?"></script>

@@ -108,10 +108,14 @@ https://replay.pokemonshowdown.com/gen7randomdoublesbattle-865046831.log
 
 -->
 
-<link rel="stylesheet" href="//pokemonshowdown.com/style/global.css?" />
-<link rel="stylesheet" href="//play.pokemonshowdown.com/style/font-awesome.css?" />
-<link rel="stylesheet" href="//play.pokemonshowdown.com/style/battle.css?a7" />
-<link rel="stylesheet" href="//play.pokemonshowdown.com/style/utilichart.css?a7" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/global.css?" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/main.css?" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/mmoshowdown-nav.css?" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/mmoshowdown-teams-replay-theme.css?" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/font-awesome.css?" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/battle.css?a7" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/utilichart.css?a7" />
+<link rel="stylesheet" href="//dex.mmoshowdown.cc/theme/panels.css" />
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-26211653-1"></script>
@@ -228,14 +232,17 @@ https://replay.pokemonshowdown.com/gen7randomdoublesbattle-865046831.log
 <div>
 
 	<header>
-		<div class="nav-wrapper"><ul class="nav">
-			<li><a class="button nav-first" href="//pokemonshowdown.com/"><img src="//pokemonshowdown.com/images/pokemonshowdownbeta.png" srcset="//pokemonshowdown.com/images/pokemonshowdownbeta.png 1x, //pokemonshowdown.com/images/pokemonshowdownbeta@2x.png 2x" alt="Pok&eacute;mon Showdown" width="146" height="44" /> Home</a></li>
-			<li><a class="button" href="//pokemonshowdown.com/dex/">Pok&eacute;dex</a></li>
-			<li><a class="button cur" href="/">Replay</a></li>
-			<li><a class="button purplebutton" href="//smogon.com/dex/" target="_blank">Strategy</a></li>
-			<li><a class="button nav-last purplebutton" href="//smogon.com/forums/" target="_blank">Forum</a></li>
-			<li><a class="button greenbutton nav-first nav-last" href="//play.pokemonshowdown.com/">Play</a></li>
-		</ul></div>
+		<div class="nav-bar">
+			<a href="//mmoshowdown.cc/"><img src="//dex.mmoshowdown.cc/images/pokemonshowdownbeta.png" srcset="//dex.mmoshowdown.cc/images/pokemonshowdownbeta.png 1x, //dex.mmoshowdown.cc/images/pokemonshowdownbeta@2x.png 2x" alt="MMO Showdown" width="146" height="44" /></a>
+			<ul class="nav">
+				<li><a class="button" href="//dex.mmoshowdown.cc/">Pok&eacute;dex</a></li>
+				<li><a class="button cur" href="/">Replays</a></li>
+				<li><a class="button" href="//teams.mmoshowdown.cc/">Teams</a></li>
+				<li><a class="button" href="https://calc.mmoshowdown.cc/">Calculator</a></li>
+				<li><a class="button" href="https://forums.pokemmo.com/" target="_blank">Forums</a></li>
+				<li><a class="button nav-last purplebutton" href="https://discord.gg/tWXGCtud4m" target="_blank">Discord</a></li>
+			</ul>
+		</div>
 	</header>
 
 	<div class="main" id="main">
@@ -246,14 +253,14 @@ https://replay.pokemonshowdown.com/gen7randomdoublesbattle-865046831.log
 
 </div>
 
-<script defer nomodule src="//play.pokemonshowdown.com/js/lib/ps-polyfill.js"></script>
-<script defer src="//play.pokemonshowdown.com/js/lib/preact.min.js"></script>
+<script defer nomodule src="//mmoshowdown.cc/js/lib/ps-polyfill.js"></script>
+<script defer src="//mmoshowdown.cc/js/lib/preact.min.js"></script>
 
-<script defer src="//play.pokemonshowdown.com/config/config.js?a7"></script>
-<script defer src="//play.pokemonshowdown.com/js/lib/jquery-1.11.0.min.js"></script>
-<script defer src="//play.pokemonshowdown.com/js/lib/html-sanitizer-minified.js"></script>
-<script defer src="//play.pokemonshowdown.com/js/battle-sound.js"></script>
-<script defer src="//play.pokemonshowdown.com/js/battledata.js?a7"></script>
+<script defer src="//mmoshowdown.cc/config/config.js?a7"></script>
+<script defer src="//mmoshowdown.cc/js/lib/jquery-1.11.0.min.js"></script>
+<script defer src="//mmoshowdown.cc/js/lib/html-sanitizer-minified.js"></script>
+<script defer src="//mmoshowdown.cc/js/battle-sound.js"></script>
+<script defer src="//mmoshowdown.cc/js/battledata.js?a7"></script>
 <script defer src="//play.pokemonshowdown.com/data/pokedex-mini.js?a7"></script>
 <script defer src="//play.pokemonshowdown.com/data/pokedex-mini-bw.js?a7"></script>
 <script defer src="//play.pokemonshowdown.com/data/graphics.js?a7"></script>
@@ -262,8 +269,8 @@ https://replay.pokemonshowdown.com/gen7randomdoublesbattle-865046831.log
 <script defer src="//play.pokemonshowdown.com/data/abilities.js?a7"></script>
 <script defer src="//play.pokemonshowdown.com/data/items.js?a7"></script>
 <script defer src="//play.pokemonshowdown.com/data/teambuilder-tables.js?a7"></script>
-<script defer src="//play.pokemonshowdown.com/js/battle-tooltips.js?a7"></script>
-<script defer src="//play.pokemonshowdown.com/js/battle.js?a7"></script>
+<script defer src="//mmoshowdown.cc/js/battle-tooltips.js?a7"></script>
+<script defer src="//mmoshowdown.cc/js/battle.js?a7"></script>
 
 <script defer src="/js/utils.js?"></script>
 <script defer src="/js/replays-battle.js?"></script>

@@ -49,3 +49,9 @@ npm-debug.log
 /teams.pokemonshowdown.com/caches/
 /teams.pokemonshowdown.com/index.html
 /teams.pokemonshowdown.com/ads.txt
+
+# mmoshowdown
+*.bak
+play.pokemonshowdown.com/testfile.txt
+play.pokemonshowdown.com/\\
+play.pokemonshowdown.com/js/client-oauth.js

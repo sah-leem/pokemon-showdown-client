@@ -1372,7 +1372,124 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			}
 		}
 	}
+	//
+	// PokeMMO custom table
+	// Reads tier data from the pokemmo mod's formats-data.ts
+	//
+	{
+		const pokemmoDex = Dex.mod('pokemmo');
+		const pokemon = Object.keys(Dex.data.Pokedex);
+		pokemon.sort();
+		const tierTable = {};
+		const overrideTier = {};
+		const formatSlices = {};
+		const tiers = [];
 
+		for (const id of pokemon) {
+			const species = pokemmoDex.species.get(id);
+			if (species.gen > 5) continue;
+
+			let tier = species.tier;
+
+			if (!tier || tier === 'Illegal' || tier === '(Illegal)') continue;
+			if (species.isNonstandard === 'Past') continue;
+
+			overrideTier[id] = tier;
+			if (!tierTable[tier]) tierTable[tier] = [];
+			tierTable[tier].push(id);
+		}
+
+		const pokemmoTierOrder = [ "OU", "UU", "NU", "UT"];
+		for (const tier of pokemmoTierOrder) {
+			formatSlices[tier] = tiers.length;
+			if (!tierTable[tier]) continue;
+			tiers.push(['header', tier]);
+			tiers.push(...tierTable[tier]);
+		}
+
+		BattleTeambuilderTable['pokemmo'] = {};
+		BattleTeambuilderTable['pokemmo'].tiers = tiers;
+		BattleTeambuilderTable['pokemmo'].overrideTier = overrideTier;
+		BattleTeambuilderTable['pokemmo'].formatSlices = formatSlices;
+		// Ability overrides for pokemmo
+		const overrideSpeciesData = {};
+		for (const id of pokemon) {
+			const species = pokemmoDex.species.get(id);
+			if (species.gen > 5) continue;
+			if (!species.exists) continue;
+				const gen5Species = Dex.mod('gen5').species.get(id);
+				const override = {abilities: species.abilities};
+				if (gen5Species.exists && JSON.stringify(species.baseStats) !== JSON.stringify(gen5Species.baseStats)) {
+					override.baseStats = species.baseStats;
+				}
+				overrideSpeciesData[id] = override;
+		}
+		BattleTeambuilderTable['pokemmo'].overrideSpeciesData = overrideSpeciesData;
+		const overrideLearnsets = {};
+		for (const id in pokemmoDex.data.Learnsets) {
+			const modLearnset = pokemmoDex.data.Learnsets[id]?.learnset;
+			if (!modLearnset) continue;
+				const compact = {};
+				for (const move in modLearnset) {
+					const gens = new Set();
+					for (const src of modLearnset[move]) gens.add(src.charAt(0));
+					compact[move] = [...gens].sort().join("");
+				}
+				overrideLearnsets[id] = compact;
+		}
+		BattleTeambuilderTable['pokemmo'].learnsets = overrideLearnsets;
+
+		// Move overrides for pokemmo
+		const overrideMoveData = {};
+		for (const id in pokemmoDex.data.Moves) {
+			const modMove = pokemmoDex.moves.get(id);
+			const baseMove = Dex.moves.get(id);
+			if (!modMove.exists || !baseMove.exists) continue;
+			if (modMove.basePower !== baseMove.basePower || modMove.pp !== baseMove.pp ||
+				modMove.type !== baseMove.type || modMove.accuracy !== baseMove.accuracy) {
+				overrideMoveData[id] = {
+					basePower: modMove.basePower,
+					pp: modMove.pp,
+					type: modMove.type,
+					accuracy: modMove.accuracy,
+				};
+			}
+		}
+		BattleTeambuilderTable['pokemmo'].overrideMoveData = overrideMoveData;
+
+                // Item overrides for pokemmo (naturalGift, fling, etc.)
+                const overrideItemData = {};
+                for (const id in pokemmoDex.data.Items) {
+                        const modItem = pokemmoDex.items.get(id);
+                        const parentItem = Dex.mod('gen5').items.get(id);
+                        if (!modItem.exists) continue;
+                        const diff = {};
+                        for (const key of ['naturalGift', 'fling', 'desc', 'shortDesc']) {
+                                if (JSON.stringify(modItem[key]) !== JSON.stringify(parentItem[key])) {
+                                        diff[key] = modItem[key];
+                                }
+                        }
+                        if (Object.keys(diff).length) overrideItemData[id] = diff;
+                }
+                BattleTeambuilderTable['pokemmo'].overrideItemData = overrideItemData;
+
+
+
+		// Item list for pokemmo - start with gen5 items, add pokemmo-specific items
+		const pokemmoItemList = [...(BattleTeambuilderTable['gen5'].items || [])];
+		const pokemmoExtraItems = ['assaultvest', 'clearamulet', 'covertcloak', 'weaknesspolicy', 'heavydutyboots', 'loadeddice', 'roomservice', 'snowball', 'luminousmoss', 'throatspray', 'safetygoggles', 'punchingglove', 'ejectpack'];
+		for (const id of pokemmoExtraItems) {
+			if (!pokemmoItemList.includes(id)) pokemmoItemList.push(id);
+		}
+		BattleTeambuilderTable['pokemmo'].items = pokemmoItemList;
+
+	}
+
+		BattleTeambuilderTable['gen5pokemmo'] = Object.assign({}, BattleTeambuilderTable['gen5'], BattleTeambuilderTable['pokemmo']);
+		// Ensure pokemmo item overrides survive the merge
+		if (BattleTeambuilderTable['pokemmo'].overrideItemData) {
+			BattleTeambuilderTable['gen5pokemmo'].overrideItemData = Object.assign({}, BattleTeambuilderTable['gen5pokemmo'].overrideItemData || {}, BattleTeambuilderTable['pokemmo'].overrideItemData);
+		}
 	//
 	// PokeMMO LC custom table
 	// Reads tier data from the pokemmolc mod's formats-data.ts

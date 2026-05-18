@@ -24,6 +24,9 @@
 				this.curTeam.iconCache = '!';
 				this.curTeam.gen = this.getGen(this.curTeam.format);
 				this.curTeam.dex = Dex.forGen(this.curTeam.gen);
+				if (this.curTeam.format && this.curTeam.format.includes('pokemmo')) {
+					this.curTeam.dex = Dex.mod('gen5pokemmo');
+				}
 				if (this.curTeam.format.includes('letsgo')) {
 					this.curTeam.dex = Dex.mod('gen7letsgo');
 				}
@@ -752,6 +755,9 @@
 			this.curTeam.iconCache = '!';
 			this.curTeam.gen = this.getGen(this.curTeam.format);
 			this.curTeam.dex = Dex.forGen(this.curTeam.gen);
+			if (this.curTeam.format && this.curTeam.format.includes('pokemmo')) {
+				this.curTeam.dex = Dex.mod('gen5pokemmo');
+			}
 			if (this.curTeam.format.includes('letsgo')) {
 				this.curTeam.dex = Dex.mod('gen7letsgo');
 			}
@@ -1338,7 +1344,7 @@
 							buf += '<span class="detailcell"><label>HP Type</label>' + (set.hpType || 'Dark') + '</span>';
 						}
 						// Hidden Power isn't in normal Gen 8
-					} else {
+					} else if (!(this.curTeam && this.curTeam.format && this.curTeam.format.includes('pokemmo'))) {
 						buf += '<span class="detailcell"><label>HP Type</label>' + (set.hpType || 'Dark') + '</span>';
 					}
 				}
@@ -1608,6 +1614,9 @@
 			this.curTeam.format = format;
 			this.curTeam.gen = this.getGen(this.curTeam.format);
 			this.curTeam.dex = Dex.forGen(this.curTeam.gen);
+			if (this.curTeam.format && this.curTeam.format.includes('pokemmo')) {
+				this.curTeam.dex = Dex.mod('gen5pokemmo');
+			}
 			if (this.curTeam.format.includes('letsgo')) {
 				this.curTeam.dex = Dex.mod('gen7letsgo');
 			}
@@ -1988,7 +1997,7 @@
 			this.$el.html('<div class="teamwrapper">' + buf + '</div>');
 			if ($(window).width() < 640) this.show();
 			this.$chart = this.$('.teambuilder-results');
-			this.search = new BattleSearch(this.$chart, this.$chart);
+			this.search = (typeof BattleSearch !== "undefined") ? new BattleSearch(this.$chart, this.$chart) : null;
 			var self = this;
 			// fun fact: Backbone DOM events don't support scroll...
 			// I guess scroll doesn't bubble like other events
@@ -2413,7 +2422,7 @@
 						}
 					}
 				}
-				if (hpType && !this.canHyperTrain(set)) {
+				if (hpType && !this.canHyperTrain(set) && !(this.curTeam && this.curTeam.format && this.curTeam.format.includes('pokemmo'))) {
 					var hpIVs;
 					switch (hpType) {
 					case 'dark':
@@ -2699,6 +2708,7 @@
 				}
 			}
 			if (!hasHiddenPower) return;
+				if (this.curTeam && this.curTeam.format && this.curTeam.format.includes("pokemmo")) return;
 			var hpTypes = ['Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark'];
 			var hpType;
 			if (this.curTeam.gen <= 2) {
@@ -3028,7 +3038,7 @@
 					if (this.curTeam.gen < 8 || isNatDex) buf += '<span class="detailcell"><label>Happiness</label>' + (typeof set.happiness === 'number' ? set.happiness : 255) + '</span>';
 				}
 				buf += '<span class="detailcell"><label>Shiny</label>' + (set.shiny ? 'Yes' : 'No') + '</span>';
-				if (!isLetsGo && (this.curTeam.gen < 8 || isNatDex)) buf += '<span class="detailcell"><label>HP Type</label>' + (set.hpType || 'Dark') + '</span>';
+				if (!isLetsGo && (this.curTeam.gen < 8 || isNatDex) && !(this.curTeam.format && this.curTeam.format.includes("pokemmo"))) buf += '<span class="detailcell"><label>HP Type</label>' + (set.hpType || 'Dark') + '</span>';
 				if (this.curTeam.gen === 8 && !isBDSP) {
 					if (!species.cannotDynamax) {
 						buf += '<span class="detailcell"><label>Dmax Level</label>' + (typeof set.dynamaxLevel === 'number' ? set.dynamaxLevel : 10) + '</span>';
@@ -3281,6 +3291,7 @@
 				if (baseFormat.substr(0, 8) === 'pokebank') baseFormat = baseFormat.substr(8);
 				if (baseFormat.substr(0, 6) === 'natdex') baseFormat = baseFormat.substr(6);
 				if (baseFormat.substr(0, 11) === 'nationaldex') baseFormat = baseFormat.substr(11);
+						if (baseFormat.substr(0, 7) === 'pokemmo') baseFormat = baseFormat.substr(7);
 				if (baseFormat.substr(-5) === 'draft') baseFormat = baseFormat.substr(0, baseFormat.length - 5);
 				if (!baseFormat) baseFormat = 'ou';
 				if (this.curTeam && this.curTeam.format) {
@@ -3316,6 +3327,7 @@
 				if (baseFormat.substr(0, 8) === 'pokebank') baseFormat = baseFormat.substr(8);
 				if (baseFormat.substr(0, 6) === 'natdex') baseFormat = baseFormat.substr(6);
 				if (baseFormat.substr(0, 11) === 'nationaldex') baseFormat = baseFormat.substr(11);
+				if (baseFormat.substr(0, 7) === 'pokemmo') baseFormat = baseFormat.substr(7);
 				if (baseFormat.substr(-5) === 'draft') baseFormat = baseFormat.substr(0, baseFormat.length - 5);
 				if (!baseFormat) baseFormat = 'ou';
 				if (this.curTeam && this.curTeam.format) {
@@ -3398,7 +3410,7 @@
 			var set = this.curSet;
 			if (!moveName || !set || this.curTeam.format === 'gen7hiddentype') return;
 			if (moveName.substr(0, 13) === 'Hidden Power ') {
-				if (set.ivs) {
+				if (set.ivs && !(this.curTeam && this.curTeam.format && this.curTeam.format.includes("pokemmo"))) {
 					for (var i in set.ivs) {
 						if (set.ivs[i] === 30) set.ivs[i] = 31;
 						if (set.ivs[i] <= 3) set.ivs[i] = 0;
@@ -3429,7 +3441,7 @@
 			var minSpe;
 			if (resetSpeed) minSpe = false;
 			if (moveName.substr(0, 13) === 'Hidden Power ') {
-				if (!this.canHyperTrain(set)) {
+				if (!this.canHyperTrain(set) && !(this.curTeam && this.curTeam.format && this.curTeam.format.includes("pokemmo"))) {
 					var hpType = moveName.substr(13);
 
 					set.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
@@ -3548,6 +3560,7 @@
 				if (baseFormat.substr(0, 8) === 'pokebank') baseFormat = baseFormat.substr(8);
 				if (baseFormat.substr(0, 6) === 'natdex') baseFormat = baseFormat.substr(6);
 				if (baseFormat.substr(0, 11) === 'nationaldex') baseFormat = baseFormat.substr(11);
+				if (baseFormat.substr(0, 7) === 'pokemmo') baseFormat = baseFormat.substr(7);
 				if (baseFormat.substr(-5) === 'draft') baseFormat = baseFormat.substr(0, baseFormat.length - 5);
 				if (!baseFormat) baseFormat = 'ou';
 				if (this.curTeam && this.curTeam.format) {

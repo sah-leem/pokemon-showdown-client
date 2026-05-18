@@ -539,7 +539,7 @@ export class TeamEditorState extends PSModel {
 				for (const stat in hpDVs) defaultIVs[stat as Dex.StatName] = hpDVs[stat as Dex.StatName]!;
 			}
 		} else {
-			const hpIVs = hpType ? this.dex.types.get(hpType).HPivs : null;
+			const hpIVs = hpType && !this.format.includes('pokemmo') ? this.dex.types.get(hpType).HPivs : null;
 			if (hpIVs) {
 				if (this.canHyperTrain(set)) {
 					if (minSpe) defaultIVs['spe'] = hpIVs['spe'] ?? 31;
@@ -2496,7 +2496,7 @@ class StatForm extends preact.Component<{
 		if (editor.gen <= 2) return null;
 
 		const hpType = editor.getHPMove(set);
-		const hpIVdata = hpType && !editor.canHyperTrain(set) && editor.getHPIVs(hpType) || null;
+		const hpIVdata = hpType && !editor.format.includes('pokemmo') && !editor.canHyperTrain(set) && editor.getHPIVs(hpType) || null;
 		const autoSpread = set.ivs && editor.defaultIVs(set, false);
 		const autoSpreadValue = autoSpread && Object.values(autoSpread).join('/');
 		if (!hpIVdata) {

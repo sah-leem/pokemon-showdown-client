@@ -58,8 +58,13 @@ export class PSSearchResults extends preact.Component<{
 
 	renderPokemonRow(id: ID, matchStart: number, matchEnd: number, errorMessage?: preact.ComponentChildren) {
 		const search = this.props.search;
-		const pokemon = search.dex.species.get(id);
+				let pokemon = search.dex.species.get(id);
 		if (!pokemon) return <li class="result">Unrecognized pokemon</li>;
+		// Override abilities for pokemmo formats
+		const pokemmoTable = (window as any).BattleTeambuilderTable?.['pokemmo'];
+			if (pokemmoTable?.overrideAbilities?.[id] && (search as any).typedSearch?.formatType === 'pokemmo') {
+			pokemon = {...pokemon, abilities: pokemmoTable.overrideAbilities[id]};
+		}
 
 		let tagStart = (pokemon.forme ? pokemon.name.length - pokemon.forme.length - 1 : 0);
 
@@ -223,7 +228,11 @@ export class PSSearchResults extends preact.Component<{
 		}
 
 		const search = this.props.search;
-		const move = search.dex.moves.get(id);
+		let move = search.dex.moves.get(id);
+		const pokemmoMoveTable = (window as any).BattleTeambuilderTable?.['pokemmo'];
+		if (pokemmoMoveTable?.overrideMoves?.[id] && (search as any).typedSearch?.formatType === 'pokemmo') {
+			move = {...move, ...pokemmoMoveTable.overrideMoves[id]};
+		}
 		const entry = slot ? `move|${move.name}|${slot}` : `move|${move.name}`;
 		if (!move) return <li class="result">Unrecognized move</li>;
 

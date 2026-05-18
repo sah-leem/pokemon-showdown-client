@@ -31,7 +31,7 @@ render=function render(){var _this3=this;
 var room=this.props.room;
 return preact.h(PSPanelWrapper,{room:room,scrollable:true},
 preact.h("div",{className:"pad"},
-preact.h("h2",null,"PS! Informational Resources"),
+preact.h("h2",null,"PokeMMO Showdown Resources"),
 preact.h("hr",null),
 preact.h("p",null,"PS! is a wide and varied site, with more facets than can be covered here easily.",
 
@@ -40,22 +40,22 @@ preact.h("br",null),"While this page chiefly documents the ever-shifting set of 
 ),
 preact.h("ul",null,
 preact.h("li",null,
-preact.h("a",{href:"https://www.smogon.com/forums/threads/3676132/"},"Beginner's Guide to Pok\xE9mon Showdown")
+preact.h("a",{href:"https://dex.mmoshowdown.cc/"},"PokeMMO Pok\xE9dex")
 ),
 preact.h("li",null,
-preact.h("a",{href:"https://www.smogon.com/dp/articles/intro_comp_pokemon"},"An introduction to competitive Pok\xE9mon")
+preact.h("a",{href:"https://calc.mmoshowdown.cc/"},"PokeMMO Damage Calculator")
 ),
 preact.h("li",null,
-preact.h("a",{href:"https://www.smogon.com/sm/articles/sm_tiers"},"What do 'OU', 'UU', etc mean?")
+preact.h("a",{href:"https://forums.pokemmo.com/"},"PokeMMO Forums")
 ),
 preact.h("li",null,
-preact.h("a",{href:"https://www.smogon.com/dex/ss/formats/"},"What are the rules for each format?")
+preact.h("a",{href:"https://mmoshowdown.cc/rules"},"PokeMMO Showdown Rules")
 ),
 preact.h("li",null,
-preact.h("a",{href:"https://www.smogon.com/ss/articles/clauses"},"What is 'Sleep Clause' and other clauses?")
+preact.h("a",{href:"https://discord.gg/tWXGCtud4m"},"Join our Discord")
 ),
 preact.h("li",null,
-preact.h("a",{href:"https://www.smogon.com/articles/getting-started"},"Next Steps for Competitive Battling")
+preact.h("a",{href:"https://replay.mmoshowdown.cc/"},"Watch Replays")
 ),
 preact.h("li",null,
 preact.h("button",{className:"button","data-cmd":"/report"},"Report a user")
