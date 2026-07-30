@@ -864,7 +864,7 @@
 					iconCache: ''
 				};
 			} else {
-				var format = this.curFolder || 'gen9';
+				var format = this.curFolder || 'gen5pokemmoou';
 				var folder = '';
 				if (format && format.charAt(format.length - 1) === '/') {
 					folder = format.slice(0, -1);

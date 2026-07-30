@@ -606,6 +606,7 @@ function toId() {
 			this.on('response:savereplay', this.uploadReplay, this);
 
 			this.on('response:rooms', this.roomsResponse, this);
+				
 
 			if (window.nodewebkit) {
 				nwWindow.on('focus', function () {

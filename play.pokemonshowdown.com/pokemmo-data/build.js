@@ -221,9 +221,19 @@ for (const id of sortedIds) {
   tierBuckets[bucket].push(id);
 }
 const tierOrder = ['Uber', 'OU', 'UU', 'NU', 'UT', 'Illegal'];
+const overrideTierObj = {};
+const formatSlicesObj = {};
 const tiersArray = [];
+// build overrideTier
+for (const id in formatsData) {
+  const t = formatsData[id]?.tier;
+  if (t && t !== 'Illegal') overrideTierObj[id] = t;
+}
+// build formatSlices
+let sliceIdx = 0;
 for (const t of tierOrder) {
   if (!tierBuckets[t].length) continue;
+  formatSlicesObj[t] = tiersArray.length;
   tiersArray.push(['header', t]);
   for (const id of tierBuckets[t]) tiersArray.push(id);
 }
@@ -263,7 +273,7 @@ for (const id in learnsets) {
 }
 const teambuilderTable = {
   tiers: tiersArray,
-  formatSlices: {}, items: [], learnsets: {}, overrideTier: {}, zuBans: {}, monotypeBans: {},
+  formatSlices: formatSlicesObj, items: [], learnsets: {}, overrideTier: overrideTierObj, zuBans: {}, monotypeBans: {},
   gen1: { ...emptyModStub },
   gen2: { ...emptyModStub },
   gen3: { ...emptyModStub },
@@ -273,8 +283,8 @@ const teambuilderTable = {
   gen7: { ...emptyModStub },
   gen8: { ...emptyModStub },
   gen9: { ...emptyModStub },
-  pokemmo: { ...emptyModStub, learnsets: compactLearnsets },
-  gen5pokemmo: { ...emptyModStub, tiers: tiersArray },
+  pokemmo: { ...emptyModStub, tiers: tiersArray, overrideTier: overrideTierObj, formatSlices: formatSlicesObj, learnsets: compactLearnsets },
+  gen5pokemmo: { ...emptyModStub, tiers: tiersArray, overrideTier: overrideTierObj, formatSlices: formatSlicesObj },
 };
 
 // --- Write ---

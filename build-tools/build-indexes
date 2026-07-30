@@ -1399,7 +1399,7 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 			tierTable[tier].push(id);
 		}
 
-		const pokemmoTierOrder = [ "OU", "UU", "NU", "UT"];
+		const pokemmoTierOrder = [ "Uber", "OU", "UU", "NU", "UT"];
 		for (const tier of pokemmoTierOrder) {
 			formatSlices[tier] = tiers.length;
 			if (!tierTable[tier]) continue;
@@ -1440,10 +1440,14 @@ process.stdout.write("Building `data/teambuilder-tables.js`... ");
 		BattleTeambuilderTable['pokemmo'].learnsets = overrideLearnsets;
 
 		// Move overrides for pokemmo
-		const overrideMoveData = {};
+		// start from gen5 overrides as base (since Object.assign replaces entirely)
+		const gen5MoveOverrides = BattleTeambuilderTable['gen5'].overrideMoveData || {};
+		const overrideMoveData = Object.assign({}, gen5MoveOverrides);
+		// layer pokemmo-specific changes on top (compare vs gen5, not gen9)
+		const gen5Dex = Dex.mod('gen5');
 		for (const id in pokemmoDex.data.Moves) {
 			const modMove = pokemmoDex.moves.get(id);
-			const baseMove = Dex.moves.get(id);
+			const baseMove = gen5Dex.moves.get(id);
 			if (!modMove.exists || !baseMove.exists) continue;
 			if (modMove.basePower !== baseMove.basePower || modMove.pp !== baseMove.pp ||
 				modMove.type !== baseMove.type || modMove.accuracy !== baseMove.accuracy) {

@@ -926,10 +926,14 @@
                                 buf += '<p>' + BattleLog.parseMessage(data.reason) + '</p>';
                         }
 
-                        buf += '<h3 style="margin-top:0; font-size:14px">Log in with Smogon</h3>';
-                        buf += '<p style="font-size:12px;margin:6px 0">mmoshowdown.cc uses Pokémon Showdown accounts. Log in with your Smogon account to play.</p>';
-                        buf += '<p style="color:#888;font-size:11px">Don\'t have one? Head to <a href="https://play.pokemonshowdown.com" target="_blank" rel="noopener">play.pokemonshowdown.com</a> to register.</p>';
-                        buf += '<p class="buttonbar"><button type="button" name="smogonOAuth" class="button"><i class="fa fa-sign-in"></i> <strong>Login with Smogon</strong></button> <button type="button" name="close" class="button">Cancel</button></p>';
+                        buf += '<h3 style="margin-top:0; font-size:14px">Choose a name</h3>';
+                        buf += '<p><label class="label"><input class="textbox autofocus" type="text" name="username" /></label></p>';
+                        buf += '<p style="color:#888;font-size:11px">Just pick a name. You can register a password later to keep it.</p>';
+                        buf += '<p class="buttonbar"><button type="submit" class="button"><strong>Choose name</strong></button></p>';
+                        buf += '<p style="text-align:center;color:#555;font-size:8pt;margin:8px 0"><span style="display:inline-block;width:35%;height:1px;background:#34373b;vertical-align:middle;margin-right:8px"></span>or<span style="display:inline-block;width:35%;height:1px;background:#34373b;vertical-align:middle;margin-left:8px"></span></p>';
+                        buf += '<h3 style="font-size:14px">Log in with Showdown</h3>';
+                        buf += '<p style="color:#888;font-size:11px">Use your Showdown account for saved teams and display name.</p>';
+                        buf += '<p class="buttonbar"><button type="button" name="smogonOAuth" class="button"><i class="fa fa-sign-in"></i> <strong>Login with Showdown</strong></button> <button type="button" name="close" class="button">Cancel</button></p>';
                         buf += '</form>';
 
                         this.$el.html(buf);
@@ -963,6 +967,7 @@
 		}
 	});
 
+	window.LoginPopup = LoginPopup;
 	var ChangePasswordPopup = this.ChangePasswordPopup = Popup.extend({
 		type: 'semimodal',
 		initialize: function (data) {

@@ -630,7 +630,7 @@ Storage.compareTeams = function (serverTeam, localTeam) {
 };
 
 Storage.loadRemoteTeams = function (after) {
-	$.get(app.user.getActionPHP(), { act: 'getteams' }, Storage.safeJSON(function (data) {
+	$.get(app.user.getActionPHP(), { act: 'getteams', userid: app.user.get('userid') }, Storage.safeJSON(function (data) {
 		if (data.actionerror) {
 			return app.addPopupMessage('Error loading uploaded teams: ' + data.actionerror);
 		}
@@ -663,7 +663,7 @@ Storage.loadRemoteTeams = function (after) {
 					return { species: mon };
 				});
 				team.team = Storage.packTeam(mons);
-				Storage.teams.unshift(team);
+				Storage.teams.push(team);
 			}
 		}
 		if (typeof after === 'function') after();

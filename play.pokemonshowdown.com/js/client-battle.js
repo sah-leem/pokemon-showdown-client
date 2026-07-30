@@ -36,7 +36,7 @@
 			this.tooltips.listen(this.$controls);
 
 			var self = this;
-			this.battle.subscribe(function () { self.updateControls(); });
+			this.battle.subscribe(function () { self.updateControls(); self.appendOTS(); });
 
 			this.users = {};
 			this.userCount = { users: 0 };
@@ -109,6 +109,68 @@
 		receive: function (data) {
 			this.add(data);
 		},
+		captureOTS: function (data) {
+			var lines = data.split("\n");
+			var teams = {};
+			var players = {};
+			for (var i = 0; i < lines.length; i++) {
+				var line = lines[i];
+				if (line.substr(0, 8) === "|player|") {
+					var pp = line.substring(8);
+					var si = pp.indexOf("|");
+					var sid = pp.substring(0, si);
+					var si2 = pp.indexOf("|", si + 1);
+					players[sid] = pp.substring(si + 1, si2);
+				}
+				if (line.substr(0, 10) === "|showteam|") {
+					var rest = line.substring(10);
+					var si = rest.indexOf("|");
+					teams[rest.substring(0, si)] = rest.substring(si + 1);
+				}
+			}
+			if (!Object.keys(teams).length) return;
+			var myName = app.user.get("name");
+			var mySide = null;
+			var oppSide = null;
+			for (var side in players) {
+				if (toID(players[side]) === toID(myName)) mySide = side;
+			}
+			if (mySide) {
+				oppSide = (mySide === "p1") ? "p2" : "p1";
+			} else {
+				if (this.battle.p1 && toID(this.battle.p1.name) === toID(myName)) oppSide = "p2";
+				else if (this.battle.p2 && toID(this.battle.p2.name) === toID(myName)) oppSide = "p1";
+			}
+			if (!oppSide || !teams[oppSide]) return;
+			var oppName = players[oppSide] || (this.battle[oppSide] ? this.battle[oppSide].name : oppSide);
+			var mons = teams[oppSide].split("]");
+			var html = '<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;">';
+			for (var j = 0; j < mons.length; j++) {
+				if (!mons[j]) continue;
+				var f = mons[j].split("|");
+				var species = f[0], item = f[2], ability = f[3];
+				var moves = f[4] ? f[4].split(",") : [];
+				if (!species) continue;
+				html += '<div style="padding:2px 4px;background:rgba(128,128,128,0.1);border-radius:3px;font-size:10px;line-height:1.3;overflow:hidden;">';
+				html += '<span style="' + Dex.getPokemonIcon(species) + 'display:inline-block;vertical-align:middle;margin-right:1px;"></span>';
+				html += '<b>' + BattleLog.escapeHTML(species) + '</b>';
+				if (item) html += ' <small style="opacity:0.7;">@ ' + BattleLog.escapeHTML(item) + '</small>';
+				html += '<br /><small style="opacity:0.6;">' + BattleLog.escapeHTML(ability || "");
+				if (moves.length) html += ' - ' + moves.map(function(m){return BattleLog.escapeHTML(m);}).join(" / ");
+				html += '</small></div>';
+			}
+			html += '</div>';
+			this.otsHTML = '<div class="ots-panel" style="clear:both;width:100%;padding:4px 6px;border-top:1px solid rgba(128,128,128,0.25);margin-top:2px;"><small style="opacity:0.6;font-weight:bold;">' + BattleLog.escapeHTML(oppName) + '\'s Team</small>' + html + '</div>';
+			this.appendOTS();
+		},
+						appendOTS: function () {
+			if (this.otsHTML) {
+				var $existing = this.$controls.find(".ots-panel");
+				if (!$existing.length) {
+					this.$controls.append(this.otsHTML);
+				}
+			}
+		},
 		focus: function (e) {
 			this.tooltips.hideTooltip();
 			if (this.battle.paused && !this.battlePaused) {
@@ -137,12 +199,16 @@
 		},
 		add: function (data) {
 			if (!data) return;
+			if (data.indexOf("There's nothing to cancel") >= 0) return;
 			if (data.substr(0, 6) === '|init|') {
 				return this.init(data);
 			}
 			if (data.substr(0, 11) === '|cantleave|') {
 				this.requireForfeit = true;
 				return;
+			}
+			if (data.indexOf('|showteam|') >= 0) {
+				this.captureOTS(data);
 			}
 			if (data.substr(0, 12) === '|allowleave|') {
 				this.requireForfeit = false;
@@ -421,6 +487,7 @@
 				break;
 
 			case 'team':
+			case 'teamConfirm':
 				if (this.battle.mySide.pokemon && !this.battle.mySide.pokemon.length) {
 					// too early, we can't determine `this.choice.count` yet
 					// TODO: send teamPreviewCount in the request object
@@ -794,6 +861,7 @@
 					'<div class="switchcontrols">' +
 					'<div class="switchselect"><button name="selectSwitch">Switch</button></div>' +
 					'<div class="switchmenu">' + switchMenu + '</div>' +
+					(this.choice.type === 'teamConfirm' ? '<div style="padding:4px 0;"><button name="confirmTeamPreview" class="button big" style="background:#5b9f49;color:#fff;padding:6px 24px;"><i class="fa fa-check"></i> Confirm Team</button></div>' : '') +
 					'</div>'
 				);
 				this.$controls.html(
@@ -931,7 +999,9 @@
 			var maxIndex = Math.min(switchables.length, 24);
 
 			var requestTitle = "";
-			if (this.choice.done) {
+			if (this.choice.type === 'teamConfirm') {
+				requestTitle = '<button name="confirmTeamPreview" class="button" style="background:#5b9f49;color:#fff;">Confirm</button> <button name="clearChoice">Back</button> Ready to battle?';
+			} else if (this.choice.done) {
 				requestTitle = '<button name="clearChoice">Back</button> ' + "What about the rest of your team?";
 			} else {
 				requestTitle = "How will you start the battle?";
@@ -1141,6 +1211,7 @@
 				this.notify("Your switch!", "Switch in your battle" + oName, 'choice');
 				break;
 			case 'team':
+			case 'teamConfirm':
 				this.notify("Team preview!", "Choose your team order in your battle" + oName, 'choice');
 				break;
 			}
@@ -1388,10 +1459,16 @@
 					this.updateControlsForPlayer();
 					return false;
 				}
+				this.choice.type = 'teamConfirm';
+				this.updateControlsForPlayer();
+				return false;
 			} else {
 				this.choice.teamPreview = [pos + 1];
 			}
 
+			this.endTurn();
+		},
+		confirmTeamPreview: function () {
 			this.endTurn();
 		},
 		chooseDisabled: function (data) {
@@ -1494,6 +1571,14 @@
 			this.clearChoice();
 		},
 		clearChoice: function () {
+			if (this.choice && (this.choice.type === 'team2' || this.choice.type === 'teamConfirm') && this.choice.done > 0) {
+				this.choice.done--;
+				if (this.choice.done === 0) {
+					this.choice.type = 'team';
+				}
+				this.updateControlsForPlayer();
+				return;
+			}
 			this.choice = null;
 			this.updateControlsForPlayer();
 		},
