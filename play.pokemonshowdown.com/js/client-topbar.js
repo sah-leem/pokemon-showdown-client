@@ -34,12 +34,13 @@
 			var status = app.user.get('status');
 			var color = away ? 'color:#888;' : BattleLog.hashColor(app.user.get('userid'));
 			if (!app.user.loaded) {
-				buf = '<button disabled class="button">Loading...</button>';
+				buf = '<button disabled class="button">' + I18n.t('Loading...') + '</button>';
 			} else if (app.user.get('named')) {
-				buf = '<span class="username" data-name="' + BattleLog.escapeHTML(name) + '"' + (away ? ' data-away="true"' : '') + (status ? 'data-status="' + BattleLog.escapeHTML(status) + '"' : '') + ' style="' + color + '"><i class="fa fa-user" style="color:' + (away ? '#888;' : '#779EC5') + '"></i> <span class="usernametext">' + BattleLog.escapeHTML(name) + '</span></span> <button class="button" name="smogonLogout" style="font-size:12px;padding:2px 8px;color:#e07060;" title="Logout"><i class="fa fa-sign-out"></i> Logout</button>';
+				buf = '<span class="username" data-name="' + BattleLog.escapeHTML(name) + '"' + (away ? ' data-away="true"' : '') + (status ? 'data-status="' + BattleLog.escapeHTML(status) + '"' : '') + ' style="' + color + '"><i class="fa fa-user" style="color:' + (away ? '#888;' : '#779EC5') + '"></i> <span class="usernametext">' + BattleLog.escapeHTML(name) + '</span></span> <button class="button" name="smogonLogout" style="font-size:12px;padding:2px 8px;color:#e07060;" title="Logout"><i class="fa fa-sign-out"></i> ' + I18n.t('Logout') + '</button>';
 			} else {
-				buf = '<button name="login" class="button">Choose name</button>';
+				buf = '<button name="login" class="button">' + I18n.t('Choose name') + '</button>';
 			}
+			buf += ' <span class="locale-wrapper" style="position:relative;display:inline-block"><button class="icon button" name="openLocale" title="Language" aria-label="Language" style="width:auto;padding:0 6px;"><i class="fa fa-globe" style="margin:0 2px 0 0"></i><span class="locale-label" style="font-size:10px;vertical-align:1px;">' + (window.I18n ? I18n.labels[I18n.locale] || 'EN' : 'EN') + '</span></button></span>';
 			buf += ' <button class="icon button" name="openSounds" title="Sound" aria-label="Sound"><i class="' + (Dex.prefs('mute') ? 'fa fa-volume-off' : 'fa fa-volume-up') + '"></i></button> <button class="icon button" name="openOptions" title="Options" aria-label="Options"><i class="fa fa-cog"></i></button>';
 			this.$userbar.html(buf);
 		},
@@ -51,7 +52,34 @@
 				try { localStorage.removeItem('ps-smogon-name'); } catch (e) {}
 				app.user.logout();
 			},
-		openSounds: function () {
+		openLocale: function () {
+		var $existing = $('.locale-dropdown');
+		if ($existing.length) {
+			$existing.remove();
+			return;
+		}
+		if (!window.I18n) return;
+		var buf = '<div class="locale-dropdown ps-popup" style="position:absolute;top:30px;right:0;min-width:140px;padding:6px 0;z-index:10000;">';
+		for (var code in I18n.supported) {
+			var isActive = code === I18n.locale;
+			buf += '<a class="locale-option" data-locale="' + code + '" style="display:block;padding:5px 14px;color:' + (isActive ? '#4488cc' : 'inherit') + ';font-size:10pt;font-weight:' + (isActive ? 'bold' : 'normal') + ';cursor:pointer;text-decoration:none;">';
+			buf += (isActive ? '<i class="fa fa-check" style="width:16px;color:#4488cc;font-size:10px;"></i> ' : '<i style="display:inline-block;width:16px;"></i> ') + I18n.supported[code];
+			buf += '</a>';
+		}
+		buf += '</div>';
+		this.$('.locale-wrapper').append(buf);
+		var self = this;
+		this.$('.locale-option').on('click', function () {
+			I18n.setLocale($(this).data('locale'));
+			$('.locale-dropdown').remove();
+		});
+		setTimeout(function () {
+			$(document).one('click', function () {
+				$('.locale-dropdown').remove();
+			});
+		}, 0);
+	},
+	openSounds: function () {
 			app.addPopup(SoundsPopup);
 		},
 		openOptions: function () {
@@ -86,15 +114,15 @@
 			switch (room ? room.type : id) {
 			case '':
 			case 'mainmenu':
-				return buf + '><i class="fa fa-home"></i> <span>Home</span></a></li>';
+				return buf + '><i class="fa fa-home"></i> <span>' + I18n.t('Home') + '</span></a></li>';
 			case 'teambuilder':
-				return buf + '><i class="fa fa-pencil-square-o"></i> <span>Teambuilder</span></a><button class="closebutton" name="closeRoom" value="' + 'teambuilder" aria-label="Close"><i class="fa fa-times-circle"></i></button></li>';
+				return buf + '><i class="fa fa-pencil-square-o"></i> <span>' + I18n.t('Teambuilder') + '</span></a><button class="closebutton" name="closeRoom" value="' + 'teambuilder" aria-label="Close"><i class="fa fa-times-circle"></i></button></li>';
 			case 'ladder':
-				return buf + '><i class="fa fa-list-ol"></i> <span>Ladder</span></a><button class="closebutton" name="closeRoom" value="' + 'ladder" aria-label="Close"><i class="fa fa-times-circle"></i></button></li>';
+				return buf + '><i class="fa fa-list-ol"></i> <span>' + I18n.t('Ladder') + '</span></a><button class="closebutton" name="closeRoom" value="' + 'ladder" aria-label="Close"><i class="fa fa-times-circle"></i></button></li>';
 			case 'resources':
-				return buf + '><i class="fa fa-question-circle"></i> <span>Resources</span></a><button class="closebutton" name="closeRoom" value="' + 'resources" aria-label="Close"><i class="fa fa-times-circle"></i></button></li>';
+				return buf + '><i class="fa fa-question-circle"></i> <span>' + I18n.t('Resources') + '</span></a><button class="closebutton" name="closeRoom" value="' + 'resources" aria-label="Close"><i class="fa fa-times-circle"></i></button></li>';
 			case 'battles':
-				return buf + '><i class="fa fa-caret-square-o-right"></i> <span>Battles</span></a><button class="closebutton" name="closeRoom" value="' + 'battles" aria-label="Close"><i class="fa fa-times-circle"></i></button></li>';
+				return buf + '><i class="fa fa-caret-square-o-right"></i> <span>' + I18n.t('Battles') + '</span></a><button class="closebutton" name="closeRoom" value="' + 'battles" aria-label="Close"><i class="fa fa-times-circle"></i></button></li>';
 			case 'rooms':
 				return buf + ' aria-label="Join chatroom"><i class="fa fa-plus" style="margin:7px auto -6px auto"></i> <span>&nbsp;</span></a></li>';
 			case 'battle':
@@ -115,12 +143,12 @@
 					} else if (p1 || p2) {
 						name = '' + BattleLog.escapeHTML(p1) + BattleLog.escapeHTML(p2);
 					} else {
-						name = '(empty room)';
+						name = I18n.t('(empty room)');
 					}
 				}
 				return buf + ' draggable="true"><i class="text">' + BattleLog.escapeFormat(formatid) + '</i><span>' + name + '</span></a><button class="closebutton" name="closeRoom" value="' + id + '" aria-label="Close"><i class="fa fa-times-circle"></i></a></li>';
 			case 'chat':
-				return buf + ' draggable="true"><i class="fa fa-comment-o"></i> <span>' + (BattleLog.escapeHTML(room.title) || (id === 'lobby' ? 'Lobby' : id)) + '</span></a><button class="closebutton" name="closeRoom" value="' + id + '" aria-label="Close"><i class="fa fa-times-circle"></i></a></li>';
+				return buf + ' draggable="true"><i class="fa fa-comment-o"></i> <span>' + (I18n.t(room.title || (id === 'lobby' ? 'Lobby' : id))) + '</span></a><button class="closebutton" name="closeRoom" value="' + id + '" aria-label="Close"><i class="fa fa-times-circle"></i></a></li>';
 			case 'html':
 			default:
 				if (room.title && room.title.charAt(0) === '[') {
@@ -387,9 +415,9 @@
 		initialize: function (data) {
 			var buf = '';
 			var muted = !!Dex.prefs('mute');
-			buf += '<p class="effect-volume"><label class="optlabel">Effect volume:</label>' + (muted ? '<em>(muted)</em>' : '<input type="range" min="0" max="100" step="1" name="effectvolume" value="' + this.getEffectVolume() + '" />') + '</p>';
-			buf += '<p class="music-volume"><label class="optlabel">Music volume:</label>' + (muted ? '<em>(muted)</em>' : '<input type="range" min="0" max="100" step="1" name="musicvolume" value="' + this.getMusicVolume() + '" />') + '</p>';
-			buf += '<p class="notif-volume"><label class="optlabel">Notification volume:</label>' + (muted ? '<em>(muted)</em>' : '<input type="range" min="0" max="100" step="1" name="notifvolume" value="' + this.getNotifVolume() + '" />') + '</p>';
+			buf += '<p class="effect-volume"><label class="optlabel">' + I18n.t('Effect volume:') + '</label>' + (muted ? '<em>(muted)</em>' : '<input type="range" min="0" max="100" step="1" name="effectvolume" value="' + this.getEffectVolume() + '" />') + '</p>';
+			buf += '<p class="music-volume"><label class="optlabel">' + I18n.t('Music volume:') + '</label>' + (muted ? '<em>(muted)</em>' : '<input type="range" min="0" max="100" step="1" name="musicvolume" value="' + this.getMusicVolume() + '" />') + '</p>';
+			buf += '<p class="notif-volume"><label class="optlabel">' + I18n.t('Notification volume:') + '</label>' + (muted ? '<em>(muted)</em>' : '<input type="range" min="0" max="100" step="1" name="notifvolume" value="' + this.getNotifVolume() + '" />') + '</p>';
 			buf += '<p><label class="checkbox"><input type="checkbox" name="muted"' + (muted ? ' checked' : '') + ' /> Mute sounds</label></p>';
 			this.$el.html(buf).css('min-width', 160);
 		},
@@ -491,9 +519,9 @@
 
 			var buf = '';
 			buf += '<p>' + (avatar ? '<img class="trainersprite" src="' + Dex.resolveAvatar(avatar) + '" width="40" height="40" style="vertical-align:middle;cursor:pointer" />' : '') + '<strong>' + BattleLog.escapeHTML(name) + '</strong></p>';
-			buf += '<p><button class="button" name="avatars">Avatar...</button></p>';
+			buf += '<p><button class="button" name="avatars">' + I18n.t('Avatar...') + '</button></p>';
 			if (!this.editingStatus) {
-				buf += '<p><button class="button" name="editstatus">Status...</button></p>';
+				buf += '<p><button class="button" name="editstatus">' + I18n.t('Status...') + '</button></p>';
 			} else {
 				buf += '<p><input name="statustext" />';
 				buf += '<button class="button" name="editstatus"><i class="fa fa-pencil"></i></button></p>';
@@ -501,46 +529,46 @@
 			if (app.user.get('named')) {
 				var registered = app.user.get('registered');
 				if (registered && (registered.userid === app.user.get('userid'))) {
-					buf += '<p><button class="button" name="changepassword">Password...</button></p>';
+					buf += '<p><button class="button" name="changepassword">' + I18n.t('Password...') + '</button></p>';
 				} else {
-					buf += '<p><button class="button" name="register">Register</button></p>';
+					buf += '<p><button class="button" name="register">' + I18n.t('Register') + '</button></p>';
 				}
 			}
 
 			buf += '<hr />';
-			buf += '<p><strong>Graphics</strong></p>';
+			buf += '<p><strong>' + I18n.t('Graphics') + '</strong></p>';
 			var theme = Dex.prefs('theme');
 			var colorSchemeQuerySupported = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').media !== 'not all';
-			buf += '<p><label class="optlabel">Theme: <select name="theme" class="button"><option value="light"' + (!theme || theme === 'light' ? ' selected="selected"' : '') + '>Light</option><option value="dark"' + (theme === 'dark' ? ' selected="selected"' : '') + '>Dark</option>';
+			buf += '<p><label class="optlabel">Theme: <select name="theme" class="button"><option value="light"' + (!theme || theme === 'light' ? ' selected="selected"' : '') + '>' + I18n.t('Light') + '</option><option value="dark"' + (theme === 'dark' ? ' selected="selected"' : '') + '>' + I18n.t('Dark') + '</option>';
 			if (colorSchemeQuerySupported) {
-				buf += '<option value="system"' + (theme === 'system' ? ' selected="selected"' : '') + '>Match system theme</option>';
+				buf += '<option value="system"' + (theme === 'system' ? ' selected="selected"' : '') + '>' + I18n.t('Match system theme') + '</option>';
 			}
 			buf += '</select></label></p>';
 			var onePanel = !!Dex.prefs('onepanel');
 			if ($(window).width() >= 660) {
-				buf += '<p><label class="optlabel">Layout: <select name="onepanel" class="button"><option value=""' + (!onePanel ? ' selected="selected"' : '') + '>&#x25EB; Left and right panels</option><option value="1"' + (onePanel ? ' selected="selected"' : '') + '>&#x25FB; Single panel</option></select></label></p>';
+				buf += '<p><label class="optlabel">Layout: <select name="onepanel" class="button"><option value=""' + (!onePanel ? ' selected="selected"' : '') + '>&#x25EB; ' + I18n.t('Left and right panels') + '</option><option value="1"' + (onePanel ? ' selected="selected"' : '') + '>&#x25FB; ' + I18n.t('Single panel') + '</option></select></label></p>';
 			}
-			buf += '<p><label class="optlabel">Background: <button class="button" name="background">Change background</button></label></p>';
-			buf += '<p><label class="checkbox"><input type="checkbox" name="noanim"' + (Dex.prefs('noanim') ? ' checked' : '') + ' /> Disable animations</label></p>';
+			buf += '<p><label class="optlabel">Background: <button class="button" name="background">' + I18n.t('Change background') + '</button></label></p>';
+			buf += '<p><label class="checkbox"><input type="checkbox" name="noanim"' + (Dex.prefs('noanim') ? ' checked' : '') + ' />' + I18n.t(' Disable animations') + '</label></p>';
 			if (navigator.userAgent.includes(' Chrome/64.')) {
-				buf += '<p><label class="checkbox"><input type="checkbox" name="nogif"' + (Dex.prefs('nogif') ? ' checked' : '') + ' /> Disable GIFs for Chrome 64 bug</label></p>';
+				buf += '<p><label class="checkbox"><input type="checkbox" name="nogif"' + (Dex.prefs('nogif') ? ' checked' : '') + ' />' + I18n.t(' Disable GIFs for Chrome 64 bug') + '</label></p>';
 			}
-			buf += '<p><label class="checkbox"><input type="checkbox" name="bwgfx"' + (Dex.prefs('bwgfx') ? ' checked' : '') + ' /> Use 2D sprites instead of 3D models</label></p>';
-			buf += '<p><label class="checkbox"><input type="checkbox" name="nopastgens"' + (Dex.prefs('nopastgens') ? ' checked' : '') + ' /> Use modern sprites for past generations</label></p>';
+			buf += '<p><label class="checkbox"><input type="checkbox" name="bwgfx"' + (Dex.prefs('bwgfx') ? ' checked' : '') + ' />' + I18n.t(' Use 2D sprites instead of 3D models') + '</label></p>';
+			buf += '<p><label class="checkbox"><input type="checkbox" name="nopastgens"' + (Dex.prefs('nopastgens') ? ' checked' : '') + ' />' + I18n.t(' Use modern sprites for past generations') + '</label></p>';
 
 			buf += '<hr />';
-			buf += '<p><strong>Chat</strong></p>';
+			buf += '<p><strong>' + I18n.t('Chat') + '</strong></p>';
 			if (Object.keys(settings).length) {
-				buf += '<p><label class="checkbox"><input type="checkbox" name="blockpms"' + (settings.blockPMs ? ' checked' : '') + ' /> Block PMs</label></p>';
-				buf += '<p><label class="checkbox"><input type="checkbox" name="blockchallenges"' + (settings.blockChallenges ? ' checked' : '') + ' /> Block Challenges</label></p>';
+				buf += '<p><label class="checkbox"><input type="checkbox" name="blockpms"' + (settings.blockPMs ? ' checked' : '') + ' />' + I18n.t(' Block PMs') + '</label></p>';
+				buf += '<p><label class="checkbox"><input type="checkbox" name="blockchallenges"' + (settings.blockChallenges ? ' checked' : '') + ' />' + I18n.t(' Block Challenges') + '</label></p>';
 			}
-			buf += '<p><label class="checkbox"><input type="checkbox" name="inchatpm"' + (Dex.prefs('inchatpm') ? ' checked' : '') + ' /> Show PMs in chat rooms</label></p>';
+			buf += '<p><label class="checkbox"><input type="checkbox" name="inchatpm"' + (Dex.prefs('inchatpm') ? ' checked' : '') + ' />' + I18n.t(' Show PMs in chat rooms') + '</label></p>';
 			buf += '<p><label class="checkbox"><input type="checkbox" name="selfhighlight"' + (!Dex.prefs('noselfhighlight') ? ' checked' : '') + '> Highlight when your name is said in chat</label></p>';
 
 			if (window.Notification) {
-				buf += '<p><label class="checkbox"><input type="checkbox" name="temporarynotifications"' + (Dex.prefs('temporarynotifications') ? ' checked' : '') + ' /> Notifications disappear automatically</label></p>';
+				buf += '<p><label class="checkbox"><input type="checkbox" name="temporarynotifications"' + (Dex.prefs('temporarynotifications') ? ' checked' : '') + ' />' + I18n.t(' Notifications disappear automatically') + '</label></p>';
 			}
-			buf += '<p><label class="checkbox"><input type="checkbox" name="leavePopupRoom"' + (Dex.prefs('leavePopupRoom') ? ' checked' : '') + ' /> Confirm before leaving a room</label></p>';
+			buf += '<p><label class="checkbox"><input type="checkbox" name="leavePopupRoom"' + (Dex.prefs('leavePopupRoom') ? ' checked' : '') + ' />' + I18n.t(' Confirm before leaving a room') + '</label></p>';
 			buf += '<p><label class="checkbox"><input type="checkbox" name="refreshprompt"' + (Dex.prefs('refreshprompt') ? ' checked' : '') + '> Confirm before refreshing</label></p>';
 			var curLang = toID(Dex.prefs('serversettings').language) || 'english';
 			var possibleLanguages = {
@@ -564,24 +592,24 @@
 			buf += '</select></label></p>';
 
 			var tours = Dex.prefs('tournaments') || 'notify';
-			buf += '<p><label class="optlabel">Tournaments: <select name="tournaments" class="button"><option value="notify"' + (tours === 'notify' ? ' selected="selected"' : '') + '>Notifications</option><option value="nonotify"' + (tours === 'nonotify' ? ' selected="selected"' : '') + '>No Notifications</option><option value="hide"' + (tours === 'hide' ? ' selected="selected"' : '') + '>Hide</option></select></label></p>';
+			buf += '<p><label class="optlabel">Tournaments: <select name="tournaments" class="button"><option value="notify"' + (tours === 'notify' ? ' selected="selected"' : '') + '>' + I18n.t('Notifications') + '</option><option value="nonotify"' + (tours === 'nonotify' ? ' selected="selected"' : '') + '>' + I18n.t('No Notifications') + '</option><option value="hide"' + (tours === 'hide' ? ' selected="selected"' : '') + '>' + I18n.t('Hide') + '</option></select></label></p>';
 			var timestamps = this.timestamps = (Dex.prefs('timestamps') || {});
 			buf += '<p><label class="optlabel">Timestamps in chat rooms: <select name="timestamps-lobby" class="button"><option value="off">Off</option><option value="minutes"' + (timestamps.lobby === 'minutes' ? ' selected="selected"' : '') + '>[HH:MM]</option><option value="seconds"' + (timestamps.lobby === 'seconds' ? ' selected="selected"' : '') + '>[HH:MM:SS]</option></select></label></p>';
 			buf += '<p><label class="optlabel">Timestamps in PMs: <select name="timestamps-pms" class="button"><option value="off">Off</option><option value="minutes"' + (timestamps.pms === 'minutes' ? ' selected="selected"' : '') + '>[HH:MM]</option><option value="seconds"' + (timestamps.pms === 'seconds' ? ' selected="selected"' : '') + '>[HH:MM:SS]</option></select></label></p>';
-			buf += '<p><label class="optlabel">Chat preferences: <button name="formatting" class="button">Text formatting</button></label></p>';
+			buf += '<p><label class="optlabel">Chat preferences: <button name="formatting" class="button">' + I18n.t('Text formatting') + '</button></label></p>';
 
 			if (window.nodewebkit) {
 				buf += '<hr />';
-				buf += '<p><strong>Desktop app</strong></p>';
-				buf += '<p><label class="optlabel"><input type="checkbox" name="logchat"' + (Dex.prefs('logchat') ? ' checked' : '') + '> Log chat</label></p>';
-				buf += '<p id="openLogFolderButton"' + (Storage.dir ? '' : ' style="display:none"') + '><button name="openLogFolder">Open log folder</button></p>';
+				buf += '<p><strong>' + I18n.t('Desktop app') + '</strong></p>';
+				buf += '<p><label class="optlabel"><input type="checkbox" name="logchat"' + (Dex.prefs('logchat') ? ' checked' : '') + '> ' + I18n.t('Log chat') + '</label></p>';
+				buf += '<p id="openLogFolderButton"' + (Storage.dir ? '' : ' style="display:none"') + '><button name="openLogFolder">' + I18n.t('Open log folder') + '</button></p>';
 			}
 
 			buf += '<hr />';
 			if (app.user.get('named')) {
-				buf += '<p class="buttonbar" style="text-align:right"><button name="login" class="button"><i class="fa fa-pencil"></i> Change name</button> <button name="logout" class="button"><i class="fa fa-power-off"></i> Log out</button></p>';
+				buf += '<p class="buttonbar" style="text-align:right"><button name="login" class="button"><i class="fa fa-pencil"></i> ' + I18n.t('Change name') + '</button> <button name="logout" class="button"><i class="fa fa-power-off"></i> ' + I18n.t('Log out') + '</button></p>';
 			} else {
-				buf += '<p class="buttonbar" style="text-align:right"><button name="login" class="button">Choose name</button></p>';
+				buf += '<p class="buttonbar" style="text-align:right"><button name="login" class="button">' + I18n.t('Choose name') + '</button></p>';
 			}
 			this.$el.html(buf).css('min-width', 160);
 		},
@@ -756,7 +784,7 @@
 		initialize: function () {
 			var cur = +app.user.get('avatar');
 			var buf = '';
-			buf += '<p>Choose an avatar or <button name="close" class="button">Cancel</button></p>';
+			buf += '<p>Choose an avatar or <button name="close" class="button">' + I18n.t('Cancel') + '</button></p>';
 
 			buf += '<div class="avatarlist">';
 			for (var i = 1; i <= 293; i++) {
@@ -929,11 +957,11 @@
                         buf += '<h3 style="margin-top:0; font-size:14px">Choose a name</h3>';
                         buf += '<p><label class="label"><input class="textbox autofocus" type="text" name="username" /></label></p>';
                         buf += '<p style="color:#888;font-size:11px">Just pick a name. You can register a password later to keep it.</p>';
-                        buf += '<p class="buttonbar"><button type="submit" class="button"><strong>Choose name</strong></button></p>';
+                        buf += '<p class="buttonbar"><button type="submit" class="button"><strong>' + I18n.t('Choose name') + '</strong></button></p>';
                         buf += '<p style="text-align:center;color:#555;font-size:8pt;margin:8px 0"><span style="display:inline-block;width:35%;height:1px;background:#34373b;vertical-align:middle;margin-right:8px"></span>or<span style="display:inline-block;width:35%;height:1px;background:#34373b;vertical-align:middle;margin-left:8px"></span></p>';
                         buf += '<h3 style="font-size:14px">Log in with Showdown</h3>';
                         buf += '<p style="color:#888;font-size:11px">Use your Showdown account for saved teams and display name.</p>';
-                        buf += '<p class="buttonbar"><button type="button" name="smogonOAuth" class="button"><i class="fa fa-sign-in"></i> <strong>Login with Showdown</strong></button> <button type="button" name="close" class="button">Cancel</button></p>';
+                        buf += '<p class="buttonbar"><button type="button" name="smogonOAuth" class="button"><i class="fa fa-sign-in"></i> <strong>' + I18n.t('Login with Showdown') + '</strong></button> <button type="button" name="close" class="button">Cancel</button></p>';
                         buf += '</form>';
 
                         this.$el.html(buf);
@@ -961,9 +989,28 @@
 			});
 		},
 		submit: function (data) {
-			this.close();
 			if (!$.trim(data.username)) return;
-			app.user.rename(data.username);
+			var self = this;
+			var userid = toUserid(data.username);
+			// check if name is registered on Smogon before allowing guest login
+			$.get('https://play.pokemonshowdown.com/action.php', {
+				act: 'getassertion',
+				userid: userid,
+				challstr: app.user.challstr
+			}, function (assertion) {
+				if (assertion === ';') {
+					// name is registered on Smogon - block impersonation
+					self.$('p.error').remove();
+					self.$('form').prepend('<p class="error">' + I18n.t('This name is registered on Showdown. Use Login with Showdown below instead.') + '</p>');
+					return;
+				}
+				self.close();
+				app.user.rename(data.username);
+			}, 'text').fail(function () {
+				// if Smogon check fails, allow through (don't block on network errors)
+				self.close();
+				app.user.rename(data.username);
+			});
 		}
 	});
 
@@ -1127,3 +1174,54 @@
 	});
 
 }).call(this, jQuery);
+
+// i18n: re-render on locale change
+if (window.I18n) {
+	I18n.onChange(function () {
+		if (app && app.topbar) {
+			app.topbar.updateUserbar();
+			app.topbar.updateTabbar();
+		}
+		// re-render mainmenu buttons
+		if (app && app.rooms && app.rooms['']) {
+			var mm = app.rooms[''];
+			var $m = mm.$('.mainmenu');
+			if ($m.length) {
+				$m.find('.mainmenu1.big').html('<strong>' + I18n.t('Battle!') + '</strong><br /><small>' + I18n.t('Find a random opponent') + '</small>');
+				$m.find('.mainmenu2').text(I18n.t('Teambuilder'));
+				$m.find('.mainmenu3').text(I18n.t('Ladder'));
+				$m.find('.mainmenu4').each(function () {
+					var val = $(this).attr('value') || $(this).attr('name');
+					if (val === '/smogtours') $(this).text(I18n.t('Tournaments'));
+					else if (val === '/join view-changelog') $(this).text(I18n.t('Changelog'));
+					else if (val === 'battles') $(this).text(I18n.t('Watch a battle'));
+				});
+				$m.find('.mainmenu5').text(I18n.t('Find a user'));
+				$m.find('.mainmenu6').text(I18n.t('Friends'));
+				$m.find('.mainmenu7').text(I18n.t('Info & Resources'));
+			}
+			var $r = mm.$('.rightmenu');
+			if ($r.length) {
+				$r.find('.mainmenu1').text(I18n.t('Join chat'));
+			}
+			// re-render labels
+			var $labels = mm.$('.label');
+			$labels.each(function () {
+				var t = $(this).text().trim();
+				if (t === 'Format:' || t === I18n.t('Format:')) $(this).text(I18n.t('Format:'));
+				if (t === 'Team:' || t === I18n.t('Team:')) $(this).text(I18n.t('Team:'));
+			});
+			mm.$('abbr[title*="spectator"]').text(I18n.t("Don't allow spectators"));
+		}
+		// re-render other open rooms
+		if (app && app.rooms) {
+			for (var id in app.rooms) {
+				if (id === '') continue;
+				var room = app.rooms[id];
+				if (room && room.update) {
+					try { room.update(); } catch (e) {}
+				}
+			}
+		}
+	});
+}

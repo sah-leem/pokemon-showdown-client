@@ -113,23 +113,19 @@ a img {
 }
 
 h1 {
-	border-top: 1px solid #AAAAAA;
 	margin: 40px -15px 0 -15px;
 	padding: 5px 15px 15px 15px;
 	color: #212F43;
 	font-size: 20pt;
 
-	background: -webkit-gradient(linear, left top, left bottom, from(#E1E8F2), to(#FFFFFF));
-	background: -moz-linear-gradient(top,  #E1E8F2,  #FFFFFF);
-	background: linear-gradient(top,  #E1E8F2,  #FFFFFF);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#E1E8F2', endColorstr='#FFFFFF');
 }
 h1:first-child {
 	margin-top: 20px;
 }
 
 .main {
-	max-width: 860px;
+	/* original max-width: none; */
+	max-width: none;
 	margin: 0 auto;
 	padding: 0 15px;
 }

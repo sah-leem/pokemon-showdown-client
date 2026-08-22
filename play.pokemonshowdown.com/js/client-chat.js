@@ -34,7 +34,7 @@
 				this.$chatAdd.html('Connecting...');
 				this.$chatbox = null;
 			} else if (!app.user.get('named')) {
-				this.$chatAdd.html('<form><button name="login" class="button">Join chat</button></form>');
+				this.$chatAdd.html('<form><button name="login" class="button">' + I18n.t('Join chat') + '</button></form>');
 				this.$chatbox = null;
 			} else {
 				var color = app.user.get('away') ? 'color:#888;' : BattleLog.hashColor(app.user.get('userid'));
@@ -1923,7 +1923,7 @@
 			'click .userlist-count': 'toggleUserlist'
 		},
 		construct: function () {
-			var plural = this.room.userCount.users === 1 ? ' user' : ' users';
+			var plural = this.room.userCount.users === 1 ? ' ' + I18n.t('user') : ' ' + I18n.t('users');
 			var buf = '';
 			var usersString = "" + (this.room.userCount.users || '0') + plural;
 			buf += '<li class="userlist-count" id="' + this.room.id + '-userlist-users" style="text-align:center;padding:2px 0">';
@@ -1970,7 +1970,7 @@
 		},
 		updateUserCount: function () {
 			var users = Math.max(this.room.userCount.users || 0, this.room.userCount.globalUsers || 0);
-			$('#' + this.room.id + '-usercount-users').html('' + users + (users === 1 ? ' user' : ' users'));
+			$('#' + this.room.id + '-usercount-users').html('' + users + (users === 1 ? ' ' + I18n.t('user') : ' ' + I18n.t('users')));
 		},
 		add: function (userid) {
 			$('#' + this.room.id + '-userlist-user-' + userid).remove();

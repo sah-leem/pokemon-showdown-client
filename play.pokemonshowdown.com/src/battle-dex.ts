@@ -296,11 +296,10 @@ export const Dex = new class implements ModdedDex {
 		if (avatar.startsWith('#')) {
 			return Dex.resourcePrefix + 'sprites/trainers-custom/' + toID(avatar.substr(1)) + '.png';
 		}
-		if (avatar.includes('.') && window.Config?.server?.registered) {
-			// custom avatar served by the server
-			const protocol = (Config.server.port === 443) ? 'https' : 'http';
-			const server = `${protocol}://${Config.server.host}:${Config.server.port}`;
-			return `${server}/avatars/${encodeURIComponent(avatar).replace(/%3F/g, '?')}`;
+		if (avatar.includes('.')) {
+			// custom avatar - strip extension, serve from trainers-custom
+			const name = avatar.replace(/\.[a-z]+$/i, '');
+			return Dex.resourcePrefix + 'sprites/trainers-custom/' + Dex.sanitizeName(name) + '.png';
 		}
 		return Dex.resourcePrefix + 'sprites/trainers/' + Dex.sanitizeName(avatar || 'unknown') + '.png';
 	}

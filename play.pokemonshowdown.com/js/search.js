@@ -260,28 +260,28 @@
 	};
 	Search.prototype.renderPokemonSortRow = function () {
 		var buf = '<li class="result"><div class="sortrow">';
-		buf += '<button class="sortcol numsortcol' + (!this.sortCol ? ' cur' : '') + '">' + (!this.sortCol ? 'Sort: ' : this.engine.firstPokemonColumn) + '</button>';
-		buf += '<button class="sortcol pnamesortcol' + (this.sortCol === 'name' ? ' cur' : '') + '" data-sort="name">Name</button>';
-		buf += '<button class="sortcol typesortcol' + (this.sortCol === 'type' ? ' cur' : '') + '" data-sort="type">Types</button>';
-		buf += '<button class="sortcol abilitysortcol' + (this.sortCol === 'ability' ? ' cur' : '') + '" data-sort="ability">Abilities</button>';
-		buf += '<button class="sortcol statsortcol' + (this.sortCol === 'hp' ? ' cur' : '') + '" data-sort="hp">HP</button>';
-		buf += '<button class="sortcol statsortcol' + (this.sortCol === 'atk' ? ' cur' : '') + '" data-sort="atk">Atk</button>';
-		buf += '<button class="sortcol statsortcol' + (this.sortCol === 'def' ? ' cur' : '') + '" data-sort="def">Def</button>';
+		buf += '<button class="sortcol numsortcol' + (!this.sortCol ? ' cur' : '') + '">' + (!this.sortCol ? '' + I18n.t('Sort:') + ' ' : this.engine.firstPokemonColumn) + '</button>';
+		buf += '<button class="sortcol pnamesortcol' + (this.sortCol === 'name' ? ' cur' : '') + '" data-sort="name">' + I18n.t('Name') + '</button>';
+		buf += '<button class="sortcol typesortcol' + (this.sortCol === 'type' ? ' cur' : '') + '" data-sort="type">' + I18n.t('Types') + '</button>';
+		buf += '<button class="sortcol abilitysortcol' + (this.sortCol === 'ability' ? ' cur' : '') + '" data-sort="ability">' + I18n.t('Abilities') + '</button>';
+		buf += '<button class="sortcol statsortcol' + (this.sortCol === 'hp' ? ' cur' : '') + '" data-sort="hp">' + I18n.t('HP') + '</button>';
+		buf += '<button class="sortcol statsortcol' + (this.sortCol === 'atk' ? ' cur' : '') + '" data-sort="atk">' + I18n.t('Atk') + '</button>';
+		buf += '<button class="sortcol statsortcol' + (this.sortCol === 'def' ? ' cur' : '') + '" data-sort="def">' + I18n.t('Def') + '</button>';
 		if (this.engine.dex.gen >= 2) {
-			buf += '<button class="sortcol statsortcol' + (this.sortCol === 'spa' ? ' cur' : '') + '" data-sort="spa">SpA</button>';
-			buf += '<button class="sortcol statsortcol' + (this.sortCol === 'spd' ? ' cur' : '') + '" data-sort="spd">SpD</button>';
+			buf += '<button class="sortcol statsortcol' + (this.sortCol === 'spa' ? ' cur' : '') + '" data-sort="spa">' + I18n.t('SpA') + '</button>';
+			buf += '<button class="sortcol statsortcol' + (this.sortCol === 'spd' ? ' cur' : '') + '" data-sort="spd">' + I18n.t('SpD') + '</button>';
 		} else {
-			buf += '<button class="sortcol statsortcol' + (this.sortCol === 'spa' ? ' cur' : '') + '" data-sort="spa">Spc</button>';
+			buf += '<button class="sortcol statsortcol' + (this.sortCol === 'spa' ? ' cur' : '') + '" data-sort="spa">' + I18n.t('Spc') + '</button>';
 		}
-		buf += '<button class="sortcol statsortcol' + (this.sortCol === 'spe' ? ' cur' : '') + '" data-sort="spe">Spe</button>';
-		buf += '<button class="sortcol statsortcol' + (this.sortCol === 'bst' ? ' cur' : '') + '" data-sort="bst">BST</button>';
+		buf += '<button class="sortcol statsortcol' + (this.sortCol === 'spe' ? ' cur' : '') + '" data-sort="spe">' + I18n.t('Spe') + '</button>';
+		buf += '<button class="sortcol statsortcol' + (this.sortCol === 'bst' ? ' cur' : '') + '" data-sort="bst">' + I18n.t('BST') + '</button>';
 		buf += '</div></li>';
 		return buf;
 	};
 	Search.prototype.renderMoveSortRow = function () {
 		var buf = '<li class="result"><div class="sortrow">';
-		buf += '<button class="sortcol movenamesortcol' + (this.sortCol === 'name' ? ' cur' : '') + '" data-sort="name">Name</button>';
-		buf += '<button class="sortcol movetypesortcol' + (this.sortCol === 'type' ? ' cur' : '') + '" data-sort="type">Type</button>';
+		buf += '<button class="sortcol movenamesortcol' + (this.sortCol === 'name' ? ' cur' : '') + '" data-sort="name">' + I18n.t('Name') + '</button>';
+		buf += '<button class="sortcol movetypesortcol' + (this.sortCol === 'type' ? ' cur' : '') + '" data-sort="type">' + I18n.t('Type') + '</button>';
 		buf += '<button class="sortcol movetypesortcol' + (this.sortCol === 'category' ? ' cur' : '') + '" data-sort="category">Cat</button>';
 		buf += '<button class="sortcol powersortcol' + (this.sortCol === 'power' ? ' cur' : '') + '" data-sort="power">Pow</button>';
 		buf += '<button class="sortcol accuracysortcol' + (this.sortCol === 'accuracy' ? ' cur' : '') + '" data-sort="accuracy">Acc</button>';
@@ -309,6 +309,7 @@
 		// name
 		var name = pokemon.name;
 		var tagStart = (pokemon.forme ? name.length - pokemon.forme.length - 1 : 0);
+		if (window.I18n && I18n.locale !== 'en') { var _tn = I18n.pokemon(toID(pokemon.name)); if (_tn !== pokemon.name) { name = _tn; tagStart = 0; matchLength = 0; } }
 		if (tagStart) name = name.substr(0, tagStart);
 		if (matchLength) {
 			name = name.substr(0, matchStart) + '<b>' + name.substr(matchStart, matchLength) + '</b>' + name.substr(matchStart + matchLength);
@@ -345,29 +346,30 @@
 		// abilities
 		if (gen >= 3 && !(this.engine && this.engine.dex.modid === 'gen7letsgo')) {
 			var abilities = pokemon.abilities;
+			var _ta = function(a) { return (a && window.I18n && I18n.locale !== 'en') ? I18n.ability(toID(a)) : (a || ''); };
 			if (gen >= 5) {
 				if (abilities['1']) {
-					buf += '<span class="col twoabilitycol">' + abilities['0'] + '<br />' +
-						abilities['1'] + '</span>';
+					buf += '<span class="col twoabilitycol">' + _ta(abilities['0']) + '<br />' +
+						_ta(abilities['1']) + '</span>';
 				} else {
-					buf += '<span class="col abilitycol">' + abilities['0'] + '</span>';
+					buf += '<span class="col abilitycol">' + _ta(abilities['0']) + '</span>';
 				}
 				var unreleasedHidden = pokemon.unreleasedHidden;
 				if (unreleasedHidden === 'Past' && (this.mod === 'natdex' || gen < 8)) unreleasedHidden = false;
 				if (abilities['S']) {
 					if (abilities['H']) {
-						buf += '<span class="col twoabilitycol' + (unreleasedHidden ? ' unreleasedhacol' : '') + '">' + (abilities['H'] || '') + '<br />(' + abilities['S'] + ')</span>';
+						buf += '<span class="col twoabilitycol' + (unreleasedHidden ? ' unreleasedhacol' : '') + '">' + _ta(abilities['H']) + '<br />(' + _ta(abilities['S']) + ')</span>';
 					} else {
-						buf += '<span class="col abilitycol">(' + abilities['S'] + ')</span>';
+						buf += '<span class="col abilitycol">(' + _ta(abilities['S']) + ')</span>';
 					}
 				} else if (abilities['H']) {
-					buf += '<span class="col abilitycol' + (unreleasedHidden ? ' unreleasedhacol' : '') + '">' + abilities['H'] + '</span>';
+					buf += '<span class="col abilitycol' + (unreleasedHidden ? ' unreleasedhacol' : '') + '">' + _ta(abilities['H']) + '</span>';
 				} else {
 					buf += '<span class="col abilitycol"></span>';
 				}
 			} else {
-				buf += '<span class="col abilitycol">' + abilities['0'] + '</span>';
-				buf += '<span class="col abilitycol">' + (abilities['1'] ? abilities['1'] : '') + '</span>';
+				buf += '<span class="col abilitycol">' + _ta(abilities['0']) + '</span>';
+				buf += '<span class="col abilitycol">' + (abilities['1'] ? _ta(abilities['1']) : '') + '</span>';
 			}
 		} else {
 			buf += '<span class="col abilitycol"></span>';
@@ -413,6 +415,7 @@
 		// name
 		var name = pokemon.name;
 		var tagStart = (pokemon.forme ? name.length - pokemon.forme.length - 1 : 0);
+		if (window.I18n && I18n.locale !== 'en') { var _tn = I18n.pokemon(toID(pokemon.name)); if (_tn !== pokemon.name) { name = _tn; tagStart = 0; matchLength = 0; } }
 		if (tagStart) name = name.substr(0, tagStart) + '<small>' + pokemon.name.substr(tagStart) + '</small>';
 		buf += '<span class="col shortpokemonnamecol">' + name + '</span> ';
 
@@ -479,7 +482,7 @@
 		buf += '</span> ';
 
 		// name
-		var name = item.name;
+		var name = (window.I18n && I18n.locale !== 'en') ? I18n.item(toID(item.name)) : item.name;
 		if (matchLength) {
 			name = name.substr(0, matchStart) + '<b>' + name.substr(matchStart, matchLength) + '</b>' + name.substr(matchStart + matchLength);
 		}
@@ -492,7 +495,7 @@
 		}
 
 		// desc
-		buf += '<span class="col itemdesccol">' + BattleLog.escapeHTML(item.shortDesc) + '</span> ';
+		buf += '<span class="col itemdesccol">' + BattleLog.escapeHTML((window.I18n && I18n.locale !== 'en' && I18n.data.itemDescs && I18n.data.itemDescs[toID(item.name)]) || item.shortDesc) + '</span> ';
 
 		buf += '</a></li>';
 
@@ -506,7 +509,7 @@
 		var buf = '<li class="result"><a' + attrs + ' data-entry="ability|' + BattleLog.escapeHTML(ability.name) + '">';
 
 		// name
-		var name = ability.name;
+		var name = (window.I18n && I18n.locale !== 'en') ? I18n.ability(toID(ability.name)) : ability.name;
 		if (matchLength) {
 			name = name.substr(0, matchStart) + '<b>' + name.substr(matchStart, matchLength) + '</b>' + name.substr(matchStart + matchLength);
 		}
@@ -518,7 +521,7 @@
 			return buf;
 		}
 
-		buf += '<span class="col abilitydesccol">' + BattleLog.escapeHTML(ability.shortDesc) + '</span> ';
+		buf += '<span class="col abilitydesccol">' + BattleLog.escapeHTML((window.I18n && I18n.locale !== 'en' && I18n.data.abilityDescs && I18n.data.abilityDescs[toID(ability.name)]) || ability.shortDesc) + '</span> ';
 
 		buf += '</a></li>';
 
@@ -532,7 +535,7 @@
 		var buf = '<li class="result"><a' + attrs + ' data-entry="move|' + BattleLog.escapeHTML(move.name) + '">';
 
 		// name
-		var name = move.name;
+		var name = (window.I18n && I18n.locale !== 'en') ? I18n.move(toID(move.name)) : move.name;
 		var tagStart = (name.substr(0, 12) === 'Hidden Power' ? 12 : 0);
 		if (tagStart) name = name.substr(0, tagStart);
 		if (matchLength) {
@@ -571,7 +574,7 @@
 		buf += '<span class="col pplabelcol"><em>PP</em><br />' + pp + '</span> ';
 
 		// desc
-		buf += '<span class="col movedesccol">' + BattleLog.escapeHTML(move.shortDesc) + '</span> ';
+		buf += '<span class="col movedesccol">' + BattleLog.escapeHTML((window.I18n && I18n.locale !== 'en' && I18n.data.moveDescs && I18n.data.moveDescs[toID(move.name)]) || move.shortDesc) + '</span> ';
 
 		buf += '</a></li>';
 
@@ -583,7 +586,7 @@
 		var buf = '<a' + attrs + ' data-entry="move|' + BattleLog.escapeHTML(move.name) + '">';
 
 		// name
-		var name = move.name;
+		var name = (window.I18n && I18n.locale !== 'en') ? I18n.move(toID(move.name)) : move.name;
 		var tagStart = (name.substr(0, 12) === 'Hidden Power' ? 12 : 0);
 		if (tagStart) name = name.substr(0, tagStart) + '<small>' + move.name.substr(tagStart) + '</small>';
 		buf += '<span class="col movenamecol">' + name + '</span> ';
@@ -608,7 +611,7 @@
 		buf += '<span class="col pplabelcol"><em>PP</em><br />' + pp + '</span> ';
 
 		// desc
-		buf += '<span class="col movedesccol">' + BattleLog.escapeHTML(move.shortDesc || move.desc) + '</span> ';
+		buf += '<span class="col movedesccol">' + BattleLog.escapeHTML((window.I18n && I18n.locale !== 'en' && I18n.data.moveDescs && I18n.data.moveDescs[toID(move.name)]) || move.shortDesc || move.desc) + '</span> ';
 
 		buf += '</a>';
 
@@ -623,7 +626,7 @@
 		buf += '<span class="col tagcol">' + tag + '</span> ';
 
 		// name
-		var name = move.name;
+		var name = (window.I18n && I18n.locale !== 'en') ? I18n.move(toID(move.name)) : move.name;
 		if (name.substr(0, 12) === 'Hidden Power') name = 'Hidden Power';
 		buf += '<span class="col shortmovenamecol">' + name + '</span> ';
 
@@ -645,7 +648,7 @@
 		buf += '<span class="col pplabelcol"><em>PP</em><br />' + (move.pp !== 1 ? move.pp * 8 / 5 : move.pp) + '</span> ';
 
 		// desc
-		buf += '<span class="col movedesccol">' + BattleLog.escapeHTML(move.shortDesc || move.desc) + '</span> ';
+		buf += '<span class="col movedesccol">' + BattleLog.escapeHTML((window.I18n && I18n.locale !== 'en' && I18n.data.moveDescs && I18n.data.moveDescs[toID(move.name)]) || move.shortDesc || move.desc) + '</span> ';
 
 		buf += '</a></li>';
 

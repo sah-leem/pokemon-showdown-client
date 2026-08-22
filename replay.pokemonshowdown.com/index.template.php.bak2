@@ -88,7 +88,7 @@ if ($replay) {
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width" />
 
-<title><?= $title ?>Replays - PokeMMO Showdown</title>
+<title><?= $title ?>Replays - Pok&eacute;mon Showdown!</title>
 
 <?php
 if ($replay) echo '<meta name="description" content="Watch a replay of a Pok&eacute;mon battle between '.htmlspecialchars(implode(' and ', $replay['players'])).'! Format: '.htmlspecialchars($replay['format']).'; Date: '.date("M j, Y", @$replay['uploadtime']).'" />';
@@ -111,10 +111,11 @@ https://replay.pokemonshowdown.com/gen7randomdoublesbattle-865046831.log
 <link rel="stylesheet" href="//mmoshowdown.cc/style/global.css?" />
 <link rel="stylesheet" href="//mmoshowdown.cc/style/main.css?" />
 <link rel="stylesheet" href="//mmoshowdown.cc/style/mmoshowdown-nav.css?" />
-<link rel="stylesheet" href="/style/mmoshowdown-nav.css" />
+<link rel="stylesheet" href="//mmoshowdown.cc/style/mmoshowdown-teams-replay-theme.css?" />
 <link rel="stylesheet" href="//mmoshowdown.cc/style/font-awesome.css?" />
 <link rel="stylesheet" href="//mmoshowdown.cc/style/battle.css?a7" />
 <link rel="stylesheet" href="//mmoshowdown.cc/style/utilichart.css?a7" />
+<link rel="stylesheet" href="//dex.mmoshowdown.cc/theme/panels.css" />
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-26211653-1"></script>
@@ -174,7 +175,7 @@ https://replay.pokemonshowdown.com/gen7randomdoublesbattle-865046831.log
 		margin: 0 auto;
 	}
 	.bar-wrapper.has-sidebar {
-		max-width: none; margin: 0;
+		max-width: 1430px;
 	}
 	.mainbar {
 		margin: 0;
@@ -188,7 +189,7 @@ https://replay.pokemonshowdown.com/gen7randomdoublesbattle-865046831.log
 			width: 400px;
 		}
 		.bar-wrapper.has-sidebar {
-			max-width: none;
+			max-width: 1510px;
 		}
 		.mainbar.has-sidebar {
 			margin-left: 410px;
@@ -209,7 +210,7 @@ https://replay.pokemonshowdown.com/gen7randomdoublesbattle-865046831.log
 	.replay-controls h1 {
 		font-size: 16pt;
 		font-weight: normal;
-		color: #FFFFFF;
+		color: #CCC;
 	}
 	.pagelink {
 		text-align: center;
@@ -226,14 +227,9 @@ https://replay.pokemonshowdown.com/gen7randomdoublesbattle-865046831.log
 			font-size: 9pt;
 		}
 	}
-
-        .battle-log,
-        .battle-log-add {
-                width: 340px;
-        }
 </style>
 
-<div class="dark">
+<div>
 
 	<header>
 		<div class="nav-bar">

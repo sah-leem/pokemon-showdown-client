@@ -47,6 +47,10 @@ https://psim.us/dev
 <link rel="manifest" href="/manifest.json" />
 <!--[if lte IE 8]><script>document.location.replace('http://pokemonshowdown.com/autodownload/win');</script><![endif]-->
 
+<!-- ShowDex fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap">
 <!-- head custom -->
 
 <div id="header" class="header">
@@ -89,6 +93,7 @@ https://psim.us/dev
 <script src="/js/lib/lodash.core.js?"></script>
 <script src="/js/lib/backbone.js?"></script>
 <script src="/js/lib/d3.v3.min.js"></script>
+<script src="/js/lib/i18n.js?"></script>
 
 <script>
 	LM.innerHTML += ' DONE<br />Loading data...';
@@ -136,6 +141,8 @@ https://psim.us/dev
 <script src="/data/moves.js?"></script>
 <script src="/data/items.js?"></script>
 <script src="/data/abilities.js?"></script>
+<script src="/js/lib/i18n-data.js?"></script>
+<script src="/js/lib/i18n-battle-text.js?"></script>
 
 <script src="/data/search-index.js?"></script>
 <script src="/data/teambuilder-tables.js?v2v2"></script>
@@ -144,3 +151,20 @@ https://psim.us/dev
 
 <script src="/data/aliases.js?" async></script>
 <script src="/js/clean-cookies.php" async></script>
+
+
+<!-- PokeMMO Calc Panel -->
+<!-- <script src="/js/pokemmo-calc-engine.js"></script> -->
+<!-- <script src="/js/pokemmo-calc-bridge.js"></script> -->
+<!-- <script src="/js/pokemmo-calc-panel.js"></script> -->
+<!-- <!-- <script src="/js/pokemmo-calc-init.js"></script> --> -->
+
+<!-- ShowDex standalone loader -->
+<script>
+window.addEventListener("load", function () {
+	if (!window.app) window.app = new App();
+	var s = document.createElement("script");
+	s.src = "/showdex/main.js";
+	document.body.appendChild(s);
+});
+</script>

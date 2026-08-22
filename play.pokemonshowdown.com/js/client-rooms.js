@@ -14,10 +14,10 @@
 
 			this.$el.addClass('ps-room-light').addClass('scrollable');
 			var buf = '<div class="pad"><button class="button" style="float:right;font-size:10pt;margin-top:3px" name="closeHide"><i class="fa fa-caret-right"></i> Hide</button>';
-			buf += '<div class="roomlisttop"></div><p><select name="sections" class="button"><option value="all">(All rooms)</option></select></p>';
-			buf += '<div class="roomlist"><p><em style="font-size:20pt">Loading...</em></p></div><div class="roomlist"></div>';
-			buf += '<p><button name="toggleMoreRooms" class="button">Show more rooms</button><p>';
-			buf += '<p><button name="joinRoomPopup" class="button">Join other room</button></p></div>';
+			buf += '<div class="roomlisttop"></div><p><select name="sections" class="button"><option value="all">' + I18n.t('(All rooms)') + '</option></select></p>';
+			buf += '<div class="roomlist"><p><em style="font-size:20pt">' + I18n.t('Loading...') + '</em></p></div><div class="roomlist"></div>';
+			buf += '<p><button name="toggleMoreRooms" class="button">' + I18n.t('Show more rooms') + '</button><p>';
+			buf += '<p><button name="joinRoomPopup" class="button">' + I18n.t('Join other room') + '</button></p></div>';
 			this.$el.html(buf);
 			app.on('response:rooms', this.update, this);
 			var settings = Dex.prefs('serversettings');
@@ -75,7 +75,7 @@
 			this.showMoreRooms = !this.showMoreRooms;
 			this.updateRoomList();
 			this.$el.find('button[name=toggleMoreRooms]').text(
-				this.showMoreRooms ? 'Hide more rooms' : 'Show more rooms'
+				this.showMoreRooms ? I18n.t('Hide more rooms') : I18n.t('Show more rooms')
 			);
 		},
 		update: function (rooms) {
@@ -98,7 +98,7 @@
 			var id = toID(roomData.title);
 			var buf = '<div><a href="' + app.root + id + '" class="blocklink"><small style="float:right">(' + Number(roomData.userCount) + ' users)</small><strong><i class="fa fa-comment-o"></i> ' + BattleLog.escapeHTML(roomData.title) + '<br /></strong><small>' + BattleLog.escapeHTML(roomData.desc || '') + '</small></a>';
 			if (roomData.subRooms && roomData.subRooms.length) {
-				buf += '<div class="subrooms"><i class="fa fa-level-up fa-rotate-90"></i> Subrooms:';
+				buf += '<div class="subrooms"><i class="fa fa-level-up fa-rotate-90"></i> ' + I18n.t('Subrooms:') + '';
 				for (var i = 0; i < roomData.subRooms.length; i++) {
 					buf += ' <a class="blocklink" href="' + app.root + toID(roomData.subRooms[i]) + '"><i class="fa fa-comment-o"></i> <strong>' + BattleLog.escapeHTML(roomData.subRooms[i]) + '</strong></a>';
 				}
@@ -117,14 +117,14 @@
 			if (rooms.userCount) {
 				var userCount = Number(rooms.userCount);
 				var battleCount = Number(rooms.battleCount);
-				var leftSide = '<button class="button" name="finduser" title="Find an online user"><span class="pixelated usercount" title="Zekrom represents the spirit of PokeMMO Showdown!" ></span><strong>' + userCount + '</strong> ' + (userCount === 1 ? 'user' : 'users') + ' online</button> ';
-				var rightSide = '<button class="button" name="roomlist" title="Watch an active battle"><span class="pixelated battlecount" title="Reshiram represents the competitive fire of PokeMMO Showdown!" ></span><strong>' + battleCount + '</strong> active ' + (battleCount === 1 ? 'battle' : 'battles') + '</button>';
+				var leftSide = '<button class="button" name="finduser" title="Find an online user"><span class="pixelated usercount" title="Zekrom represents the spirit of PokeMMO Showdown!" ></span><strong>' + userCount + '</strong> ' + I18n.t('users online') + '</button> ';
+				var rightSide = '<button class="button" name="roomlist" title="Watch an active battle"><span class="pixelated battlecount" title="Reshiram represents the competitive fire of PokeMMO Showdown!" ></span><strong>' + battleCount + '</strong> ' + I18n.t('active battles') + '</button>';
 				this.$('.roomlisttop').html('<div class="roomcounters">' + leftSide + '</td><td>' + rightSide + '</div>');
 			}
 
 			if (rooms.pspl) {
 				for (var i = 0; i < rooms.pspl.length; i++) {
-					rooms.pspl[i].spotlight = "Spotlight rooms";
+					rooms.pspl[i].spotlight = I18n.t('Spotlight rooms');
 				}
 				rooms.chat = rooms.pspl.concat(rooms.chat);
 				rooms.pspl = null;
@@ -166,7 +166,7 @@
 
 			this.$('.roomlist').first().html(
 				(officialRooms.length ?
-					'<h2 class="rooms-officialchatrooms">Official chat rooms</h2>' + officialRooms.sort(this.compareRooms).map(this.renderRoomBtn).join("") : ''
+					'<h2 class="rooms-officialchatrooms">' + I18n.t('Official chat rooms') + '</h2>' + officialRooms.sort(this.compareRooms).map(this.renderRoomBtn).join("") : ''
 				) +
 				(spotlightRooms.length ?
 					'<h2 class="rooms-psplchatrooms">' + BattleLog.escapeHTML(spotlightLabel) + '</h2>' + spotlightRooms.sort(this.compareRooms).map(this.renderRoomBtn).join("") : ''
@@ -174,10 +174,10 @@
 			);
 			this.$('.roomlist').last().html(
 				(otherRooms.length ?
-					'<h2 class="rooms-chatrooms">Chat rooms</h2>' + otherRooms.sort(this.compareRooms).map(this.renderRoomBtn).join("") : ''
+					'<h2 class="rooms-chatrooms">' + I18n.t('Chat rooms') + '</h2>' + otherRooms.sort(this.compareRooms).map(this.renderRoomBtn).join("") : ''
 				) +
 				(hiddenRooms.length && this.showMoreRooms ?
-					'<h2 class="rooms-chatrooms">Hidden rooms</h2>' + hiddenRooms.sort(this.compareRooms).map(this.renderRoomBtn).join("") : ''
+					'<h2 class="rooms-chatrooms">' + I18n.t('Hidden rooms') + '</h2>' + hiddenRooms.sort(this.compareRooms).map(this.renderRoomBtn).join("") : ''
 				)
 			);
 		},
@@ -223,7 +223,7 @@
 		},
 		initialize: function () {
 			this.$el.addClass('ps-room-light').addClass('scrollable');
-			var buf = '<div class="pad"><button class="button" style="float:right;font-size:10pt;margin-top:3px" name="close"><i class="fa fa-times"></i> Close</button><div class="roomlist"><p><button class="button" name="refresh"><i class="fa fa-refresh"></i> Refresh</button> <span style="' + Dex.getPokemonIcon('reshiram') + ';display:inline-block;vertical-align:middle" class="picon" title="Reshiram represents the competitive fire of PokeMMO Showdown!"></span></p>';
+			var buf = '<div class="pad"><button class="button" style="float:right;font-size:10pt;margin-top:3px" name="close"><i class="fa fa-times"></i> ' + I18n.t('Close') + '</button><div class="roomlist"><p><button class="button" name="refresh"><i class="fa fa-refresh"></i> ' + I18n.t('Refresh') + '</button> <span style="' + Dex.getPokemonIcon('reshiram') + ';display:inline-block;vertical-align:middle" class="picon" title="Reshiram represents the competitive fire of PokeMMO Showdown!"></span></p>';
 
 			buf += '<p><label class="label">Format:</label><button class="select formatselect" name="selectFormat">(All formats)</button></p>';
 			buf += '<label>Minimum Elo: <select name="elofilter" class="button"><option value="none">None</option><option value="1000">1000</option><option value="1100">1100</option><option value="1300">1300</option><option value="1500">1500</option><option value="1700">1700</option><option value="1900">1900</option></select></label>';

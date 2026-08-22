@@ -16,7 +16,7 @@
 
 			this.isSideRoom = Dex.prefs('rightpanelbattles');
 
-			this.$el.addClass('ps-room-opaque').html('<div class="battle">Battle is here</div><div class="foehint"></div><div class="battle-log" aria-label="Battle Log" role="complementary"></div><div class="battle-log-add">Connecting...</div><ul class="battle-userlist userlist userlist-minimized"></ul><div class="battle-controls" role="complementary" aria-label="Battle Controls"></div><button class="battle-chat-toggle button" name="showChat"><i class="fa fa-caret-left"></i> Chat</button>');
+			this.$el.addClass('ps-room-opaque').html('<div class="battle">Battle is here</div><div class="foehint"></div><div class="battle-log" aria-label="Battle Log" role="complementary"></div><div class="battle-log-add">' + I18n.t('Connecting...') + '</div><ul class="battle-userlist userlist userlist-minimized"></ul><div class="battle-controls" role="complementary" aria-label="Battle Controls"></div><button class="battle-chat-toggle button" name="showChat"><i class="fa fa-caret-left"></i> Chat</button>');
 
 			this.$battle = this.$el.find('.battle');
 			this.$controls = this.$el.find('.battle-controls');
@@ -347,7 +347,7 @@
 						// paused
 						this.$controls.html(
 							'<p><button class="button" style="min-width:4.5em;margin-right:3px" name="resume"><i class="fa fa-play"></i><br />Play</button> ' +
-							'<button class="button button-first" name="instantReplay"><i class="fa fa-undo"></i><br />First turn</button><button class="button button-first" style="margin-left:1px" name="rewindTurn"><i class="fa fa-step-backward"></i><br />Prev turn</button><button class="button button-last" style="margin-right:2px" name="skipTurn"><i class="fa fa-step-forward"></i><br />Skip turn</button><button class="button button-last" name="goToEnd"><i class="fa fa-fast-forward"></i><br />Skip to end</button></p>' +
+							'<button class="button button-first" name="instantReplay"><i class="fa fa-undo"></i><br />First turn</button><button class="button button-first" style="margin-left:1px" name="rewindTurn"><i class="fa fa-step-backward"></i><br />Prev turn</button><button class="button button-last" style="margin-right:2px" name="skipTurn"><i class="fa fa-step-forward"></i><br />' + I18n.t('Skip turn') + '</button><button class="button button-last" name="goToEnd"><i class="fa fa-fast-forward"></i><br />' + I18n.t('Skip to end') + '</button></p>' +
 							switchViewpointButton
 						);
 					} else {
@@ -368,13 +368,13 @@
 
 			if (this.battle.ended) {
 
-				var replayDownloadButton = '<span style="float:right;"><a href="//' + Config.routes.replays + '/download" class="button replayDownloadButton"><i class="fa fa-download"></i> Download replay</a><br /><br /><button class="button" name="saveReplay"><i class="fa fa-upload"></i> Upload and share replay</button></span>';
+				var replayDownloadButton = '<span style="float:right;"><a href="//' + Config.routes.replays + '/download" class="button replayDownloadButton"><i class="fa fa-download"></i> ' + I18n.t('Download replay') + '</a><br /><br /><button class="button" name="saveReplay"><i class="fa fa-upload"></i> ' + I18n.t('Upload and share replay') + '</button></span>';
 
 				// battle has ended
 				if (this.side) {
 					// was a player
 					this.closeNotification('choice');
-					this.$controls.html('<div class="controls"><p>' + replayDownloadButton + '<button class="button" name="instantReplay"><i class="fa fa-undo"></i><br />Instant replay</button></p><p><button class="button" name="closeAndMainMenu"><strong>Main menu</strong><br /><small>(closes this battle)</small></button> <button class="button" name="closeAndRematch"><strong>Rematch</strong><br /><small>(closes this battle)</small></button></p></div>');
+					this.$controls.html('<div class="controls"><p>' + replayDownloadButton + '<button class="button" name="instantReplay"><i class="fa fa-undo"></i><br />' + I18n.t('Instant replay') + '</button></p><p><button class="button" name="closeAndMainMenu"><strong>' + I18n.t('Main menu') + '</strong><br /><small>' + I18n.t('(closes this battle)') + '</small></button> <button class="button" name="closeAndRematch"><strong>' + I18n.t('Rematch') + '</strong><br /><small>(closes this battle)</small></button></p></div>');
 				} else {
 					this.$controls.html('<div class="controls"><p>' + replayDownloadButton + '<button class="button" name="instantReplay"><i class="fa fa-undo"></i><br />Instant replay</button></p>' + switchViewpointButton + '</div>');
 				}
@@ -534,7 +534,7 @@
 		},
 		timerInterval: 0,
 		getTimerHTML: function (nextTick) {
-			var time = 'Timer';
+			var time = I18n.t('Timer');
 			var timerTicking = (this.battle.kickingInactive && this.request && !this.request.wait && !(this.choice && this.choice.waiting)) ? ' timerbutton-on' : '';
 
 			if (!nextTick) {
@@ -662,7 +662,7 @@
 
 			var requestTitle = '';
 			if (type === 'move2' || type === 'movetarget') {
-				requestTitle += '<button name="clearChoice">Back</button> ';
+				requestTitle += '<button name="clearChoice">' + I18n.t('Back') + '</button> ';
 			}
 
 			// Target selector
@@ -730,7 +730,7 @@
 			} else {
 				// Move chooser
 				var hpBar = '<small class="' + (hpRatio < 0.2 ? 'critical' : hpRatio < 0.5 ? 'weak' : 'healthy') + '">HP ' + switchables[pos].hp + '/' + switchables[pos].maxhp + '</small>';
-				requestTitle += ' What will <strong>' + BattleLog.escapeHTML(switchables[pos].name) + '</strong> do? ' + hpBar;
+				requestTitle += ' ' + I18n.t('What will {pokemon} do?', {pokemon: '<strong>' + BattleLog.escapeHTML(switchables[pos].name) + '</strong>'}) + ' ' + hpBar;
 
 				var hasMoves = false;
 				var moveMenu = '';
@@ -755,10 +755,10 @@
 						movebuttons += '<button class="movebutton type-' + moveType + ' has-tooltip" name="chooseMove" value="' + (i + 1) + '" data-move="' + BattleLog.escapeHTML(moveData.move) + '" data-target="' + BattleLog.escapeHTML(moveData.target) + '" data-tooltip="' + BattleLog.escapeHTML(tooltipArgs) + '">';
 						hasMoves = true;
 					}
-					movebuttons += name + '<br /><small class="type">' + (moveType ? Dex.types.get(moveType).name : "Unknown") + '</small> <small class="pp">' + pp + '</small>&nbsp;</button> ';
+					movebuttons += name + '<br /><small class="type">' + (moveType ? I18n.type(Dex.types.get(moveType).name) : I18n.t("Unknown")) + '</small> <small class="pp">' + pp + '</small>&nbsp;</button> ';
 				}
 				if (!hasMoves) {
-					moveMenu += '<button class="movebutton" name="chooseMove" value="0" data-move="Struggle" data-target="randomNormal">Struggle<br /><small class="type">Normal</small> <small class="pp">&ndash;</small>&nbsp;</button> ';
+					moveMenu += '<button class="movebutton" name="chooseMove" value="0" data-move="Struggle" data-target="randomNormal">' + I18n.move('struggle') + '<br /><small class="type">' + I18n.type('Normal') + '</small> <small class="pp">&ndash;</small>&nbsp;</button> ';
 				} else {
 					if (canZMove || canDynamax || currentlyDynamaxed) {
 						var classType = canZMove ? 'z' : 'max';
@@ -981,7 +981,7 @@
 
 				var controls = (
 					'<div class="switchcontrols">' +
-					'<div class="switchselect"><button name="selectSwitch">' + (isReviving ? 'Revive' : 'Switch') + '</button></div>' +
+					'<div class="switchselect"><button name="selectSwitch">' + (isReviving ? I18n.t('Revive') : I18n.t('Switch')) + '</button></div>' +
 					'<div class="switchmenu">' + switchMenu + '</div>' +
 					'</div>'
 				);
@@ -1000,9 +1000,9 @@
 
 			var requestTitle = "";
 			if (this.choice.type === 'teamConfirm') {
-				requestTitle = '<button name="confirmTeamPreview" class="button" style="background:#5b9f49;color:#fff;">Confirm</button> <button name="clearChoice">Back</button> Ready to battle?';
+				requestTitle = '<button name="confirmTeamPreview" class="button" style="background:#5b9f49;color:#fff;">' + I18n.t('Confirm') + '</button> <button name="clearChoice">Back</button> ' + I18n.t('Ready to battle?') + '';
 			} else if (this.choice.done) {
-				requestTitle = '<button name="clearChoice">Back</button> ' + "What about the rest of your team?";
+				requestTitle = '<button name="clearChoice">Back</button> ' + I18n.t('What about the rest of your team?');
 			} else {
 				requestTitle = "How will you start the battle?";
 			}
@@ -1049,7 +1049,7 @@
 		getPlayerChoicesHTML: function () {
 			var buf = '<p>' + this.getTimerHTML();
 			if (!this.choice || !this.choice.waiting) {
-				return buf + '<em>Waiting for opponent...</em></p>';
+				return buf + '<em>' + I18n.t('Waiting for opponent...') + '</em></p>';
 			}
 			buf += '<small>';
 
@@ -1148,7 +1148,7 @@
 			}
 			buf += '</small></p>';
 			if (!this.finalDecision && !this.battle.hardcoreMode) {
-				buf += '<p><small><em>Waiting for opponent...</em></small> <button class="button" name="undoChoice">Cancel</button></p>';
+				buf += '<p><small><em>Waiting for opponent...</em></small> <button class="button" name="undoChoice">' + I18n.t('Cancel') + '</button></p>';
 			}
 			return buf;
 		},
@@ -1656,7 +1656,7 @@
 				buf += ' </p><p><button type="submit" name="leaveRoom" class="button"><strong>Close room</strong></button>';
 			} else {
 				buf += ' Are you sure?</p><p><label class="checkbox"><input type="checkbox" name="closeroom" checked /> Close after forfeiting</label></p>';
-				buf += '<p><button type="submit" class="button"><strong>Forfeit</strong></button> ';
+				buf += '<p><button type="submit" class="button"><strong>' + I18n.t('Forfeit') + '</strong></button> ';
 			}
 			if (this.gameType === 'battle' && this.room.battle && !this.room.battle.rated) {
 				buf += '<button type="button" name="replacePlayer" class="button">Replace player</button> ';

@@ -43,34 +43,34 @@
 				buf += '</div>';
 			} else {
 				buf += '<div class="menugroup"><form class="battleform" data-search="1">';
-				buf += '<p><label class="label">Format:</label>' + this.renderFormats() + '</p>';
-				buf += '<p><label class="label">Team:</label>' + this.renderTeams() + '</p>';
+				buf += '<p><label class="label">' + I18n.t('Format:') + '</label>' + this.renderFormats() + '</p>';
+				buf += '<p><label class="label">' + I18n.t('Team:') + '</label>' + this.renderTeams() + '</p>';
 				buf += '<p><label class="label" name="partner" style="display:none">';
 				buf += 'Partner:<br />';
 				buf += '<input class="partnerselect" /><button name="partnersubmit">Invite</button></label></p>';
-				buf += '<p><label class="checkbox"><input type="checkbox" name="private" ' + (Storage.prefs('disallowspectators') ? 'checked' : '') + ' /> <abbr title="You can still invite spectators by giving them the URL or using the /invite command">Don\'t allow spectators</abbr></label></p>';
-				buf += '<p><button class="button mainmenu1 big" name="search"><strong>Battle!</strong><br /><small>Find a random opponent</small></button></p></form></div>';
+				buf += '<p><label class="checkbox"><input type="checkbox" name="private" ' + (Storage.prefs('disallowspectators') ? 'checked' : '') + ' /> <abbr title="You can still invite spectators by giving them the URL or using the /invite command">' + I18n.t("Don't allow spectators") + '</abbr></label></p>';
+				buf += '<p><button class="button mainmenu1 big" name="search"><strong>' + I18n.t('Battle!') + '</strong><br /><small>' + I18n.t('Find a random opponent') + '</small></button></p></form></div>';
 			}
 
 			buf += '<div class="menugroup">';
-			buf += '<p><button class="button mainmenu2" name="joinRoom" value="teambuilder">Teambuilder</button></p>';
-			buf += '<p><button class="button mainmenu3" name="joinRoom" value="ladder">Ladder</button></p>';
-			buf += '<p><button class="button mainmenu4" name="send" value="/smogtours">Tournaments</button></p>';
-				buf += '<p><button class="button mainmenu4" name="send" value="/join view-changelog">Changelog</button></p>';
+			buf += '<p><button class="button mainmenu2" name="joinRoom" value="teambuilder">' + I18n.t('Teambuilder') + '</button></p>';
+			buf += '<p><button class="button mainmenu3" name="joinRoom" value="ladder">' + I18n.t('Ladder') + '</button></p>';
+			buf += '<p><button class="button mainmenu4" name="send" value="/smogtours">' + I18n.t('Tournaments') + '</button></p>';
+				buf += '<p><button class="button mainmenu4" name="send" value="/join view-changelog">' + I18n.t('Changelog') + '</button></p>';
 			buf += '</div>';
 
-			buf += '<div class="menugroup"><p><button class="button mainmenu4 onlineonly disabled" name="joinRoom" value="battles">Watch a battle</button></p>';
-			buf += '<p><button class="button mainmenu5 onlineonly disabled" name="finduser">Find a user</button></p>';
-			buf += '<p><button class="button mainmenu6 onlineonly disabled" name="send" value="/friends">Friends</button></p>';
-			buf += '<p><button class="button mainmenu7" name="joinRoom" value="resources">Info & Resources</button></p></div>';
+			buf += '<div class="menugroup"><p><button class="button mainmenu4 onlineonly disabled" name="joinRoom" value="battles">' + I18n.t('Watch a battle') + '</button></p>';
+			buf += '<p><button class="button mainmenu5 onlineonly disabled" name="finduser">' + I18n.t('Find a user') + '</button></p>';
+			buf += '<p><button class="button mainmenu6 onlineonly disabled" name="send" value="/friends">' + I18n.t('Friends') + '</button></p>';
+			buf += '<p><button class="button mainmenu7" name="joinRoom" value="resources">' + I18n.t('Info & Resources') + '</button></p></div>';
 
 			this.$('.mainmenu').html(buf);
 
 			// right menu
 			if (document.location.hostname === Config.routes.client) {
-				this.$('.rightmenu').html('<div class="menugroup"><p><button class="button mainmenu1 onlineonly disabled" name="joinRoom" value="rooms">Join chat</button></p></div>');
+				this.$('.rightmenu').html('<div class="menugroup"><p><button class="button mainmenu1 onlineonly disabled" name="joinRoom" value="rooms">' + I18n.t('Join chat') + '</button></p></div>');
 			} else {
-				this.$('.rightmenu').html('<div class="menugroup"><p><button class="button mainmenu1 onlineonly disabled" name="joinRoom" value="lobby">Join lobby chat</button></p></div>');
+				this.$('.rightmenu').html('<div class="menugroup"><p><button class="button mainmenu1 onlineonly disabled" name="joinRoom" value="lobby">' + I18n.t('Join lobby chat') + '</button></p></div>');
 			}
 
 			// footer
@@ -279,8 +279,8 @@
 				buf += '<p><label class="label">' + (teamFormat ? 'Format' : 'Game') + ':</label>' + this.renderFormats(formatName, true) + '</p>';
 			}
 			if (teamFormat) {
-				buf += '<p><label class="label">Team:</label>' + this.renderTeams(teamFormat) + '</p>';
-				buf += '<p><label class="checkbox"><input type="checkbox" name="private" ' + (Storage.prefs('disallowspectators') ? 'checked' : '') + ' /> <abbr title="You can still invite spectators by giving them the URL or using the /invite command">Don\'t allow spectators</abbr></label></p>';
+				buf += '<p><label class="label">' + I18n.t('Team:') + '</label>' + this.renderTeams(teamFormat) + '</p>';
+				buf += '<p><label class="checkbox"><input type="checkbox" name="private" ' + (Storage.prefs('disallowspectators') ? 'checked' : '') + ' /> <abbr title="You can still invite spectators by giving them the URL or using the /invite command">' + I18n.t("Don't allow spectators") + '</abbr></label></p>';
 			}
 			buf += '<p class="buttonbar"><button name="acceptChallenge" class="button"><strong>' + BattleLog.escapeHTML(acceptButtonLabel) + '</strong></button> <button type="button" name="rejectChallenge" class="button">' + BattleLog.escapeHTML(rejectButtonLabel) + '</button></p></form>';
 			$challenge.html(buf);
@@ -720,7 +720,7 @@
 				$formatButton.replaceWith(this.renderFormats(format));
 				$teamButton.replaceWith(this.renderTeams(format, teamIndex));
 
-				$searchForm.find('button.big').html('<strong>Battle!</strong><br /><small>Find a random opponent</small>').removeClass('disabled');
+				$searchForm.find('button.big').html('<strong>' + I18n.t('Battle!') + '</strong><br /><small>' + I18n.t('Find a random opponent') + '</small>').removeClass('disabled');
 				$searchForm.find('p.cancel').remove();
 			} else {
 				$formatButton.addClass('preselected')[0].disabled = true;
@@ -791,7 +791,7 @@
 				var $challenge = this.openChallenge(name);
 
 				var buf = '<form class="battleform"><p>Waiting for ' + BattleLog.escapeHTML(name) + '...</p>';
-				buf += '<p><label class="label">Format:</label>' + this.renderFormats(challenge.format, true) + '</p>';
+				buf += '<p><label class="label">' + I18n.t('Format:') + '</label>' + this.renderFormats(challenge.format, true) + '</p>';
 				buf += '<p class="buttonbar"><button name="cancelChallenge" class="button">Cancel</button></p></form>';
 
 				$challenge.html(buf);
@@ -813,8 +813,8 @@
 					if (!$challenge.find('button[name=makeChallenge]').length) {
 						app.playNotificationSound();
 						var buf = '<form class="battleform"><p>' + BattleLog.escapeHTML(name) + ' wants to battle!</p>';
-						buf += '<p><label class="label">Format:</label>' + self.renderFormats(format, true) + '</p>';
-						buf += '<p><label class="label">Team:</label>' + self.renderTeams(format) + '</p>';
+						buf += '<p><label class="label">' + I18n.t('Format:') + '</label>' + self.renderFormats(format, true) + '</p>';
+						buf += '<p><label class="label">' + I18n.t('Team:') + '</label>' + self.renderTeams(format) + '</p>';
 						buf += '<p><label class="checkbox"><input type="checkbox" name="private" ' + (Storage.prefs('disallowspectators') ? 'checked' : '') + ' /> <abbr title="You can still invite spectators by giving them the URL or using the /invite command">Don\'t allow spectators</abbr></label></p>';
 						buf += '<p class="buttonbar"><button name="acceptChallenge" class="button"><strong>Accept</strong></button> <button type="button" name="rejectChallenge" class="button">Reject</button></p></form>';
 						$challenge.html(buf);
@@ -866,7 +866,7 @@
 			}
 			this.$('button.onlineonly').removeClass('disabled');
 
-			if (!this.searching) this.$('.mainmenu button.big').html('<strong>Battle!</strong><br /><small>Find a random opponent</small>').removeClass('disabled');
+			if (!this.searching) this.$('.mainmenu button.big').html('<strong>' + I18n.t('Battle!') + '</strong><br /><small>' + I18n.t('Find a random opponent') + '</small>').removeClass('disabled');
 			var self = this;
 			this.$('button[name=format]').each(function (i, el) {
 				var val = el.value;
@@ -913,8 +913,8 @@
 
 			$challenge = this.openChallenge(name);
 			var buf = '<form class="battleform"><p>Challenge ' + BattleLog.escapeHTML(name) + '?</p>';
-			buf += '<p><label class="label">Format:</label>' + this.renderFormats(format) + '</p>';
-			buf += '<p><label class="label">Team:</label>' + this.renderTeams(format) + '</p>';
+			buf += '<p><label class="label">' + I18n.t('Format:') + '</label>' + this.renderFormats(format) + '</p>';
+			buf += '<p><label class="label">' + I18n.t('Team:') + '</label>' + this.renderTeams(format) + '</p>';
 			buf += '<p><label class="checkbox"><input type="checkbox" name="private" ' + (Storage.prefs('disallowspectators') ? 'checked' : '') + ' /> <abbr title="You can still invite spectators by giving them the URL or using the /invite command">Don\'t allow spectators</abbr></label></p>';
 			var bestOfDefault = format && BattleFormats[format] ? BattleFormats[format].bestOfDefault : false;
 			buf += '<p' + (!bestOfDefault ? ' class="hidden">' : '>');
@@ -939,7 +939,7 @@
 				var team = null;
 				if (Storage.teams[teamIndex]) team = Storage.teams[teamIndex];
 				if (format.indexOf('@@@') === -1 && !window.BattleFormats[format].team && !team) {
-					app.addPopupMessage("You need to go into the Teambuilder and build a team for this format.");
+					app.addPopupMessage(I18n.t('You need to go into the Teambuilder and build a team for this format.'));
 					return;
 				}
 				app.sendTeam(team, function () {
@@ -986,12 +986,12 @@
 
 			// if it's a custom format, let the user figure it out
 			if (window.BattleFormats[format] && !window.BattleFormats[format].team && !team) {
-				app.addPopupMessage("You need to go into the Teambuilder and build a team for this format.");
+				app.addPopupMessage(I18n.t('You need to go into the Teambuilder and build a team for this format.'));
 				return;
 			}
 
 			var buf = '<form class="battleform pending"><p>Challenging ' + BattleLog.escapeHTML(name) + '...</p>';
-			buf += '<p><label class="label">Format:</label>' + this.renderFormats(format, true) + '</p>';
+			buf += '<p><label class="label">' + I18n.t('Format:') + '</label>' + this.renderFormats(format, true) + '</p>';
 			buf += '<p class="buttonbar"><button name="cancelChallenge" class="button">Cancel</button></p></form>';
 
 			$(target).closest('.challenge').html(buf);
@@ -1036,10 +1036,10 @@
 		curFormat: '',
 		renderFormats: function (formatid, noChoice) {
 			if (!window.BattleFormats) {
-				return '<button class="select formatselect" name="format" disabled value="' + BattleLog.escapeHTML(formatid) + '"><em>Loading...</em></button>';
+				return '<button class="select formatselect" name="format" disabled value="' + BattleLog.escapeHTML(formatid) + '"><em>' + I18n.t('Loading...') + '</em></button>';
 			}
 			if (_.isEmpty(BattleFormats)) {
-				return '<button class="select formatselect" name="format" disabled><em>No formats available</em></button>';
+				return '<button class="select formatselect" name="format" disabled><em>' + I18n.t('No formats available') + '</em></button>';
 			}
 			if (!noChoice) {
 				this.curFormat = formatid;
@@ -1127,7 +1127,7 @@
 				if (Storage.teams) {
 					app.addPopupMessage("Please select a team.");
 				} else {
-					app.addPopupMessage("You need to go into the Teambuilder and build a team for this format.");
+					app.addPopupMessage(I18n.t('You need to go into the Teambuilder and build a team for this format.'));
 				}
 				return;
 			}
