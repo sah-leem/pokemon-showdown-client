@@ -1,0 +1,186 @@
+<style>
+/* mmoshowdown news widget */
+.mmo-news {
+  border-radius: 5px;
+  padding: 14px;
+  font-family: Verdana, sans-serif;
+  background: rgba(255, 255, 255, 0.33);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  color: #1a2530;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+html.dark .mmo-news {
+  background: rgba(15, 20, 28, 0.33);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e8f0f4;
+}
+.mmo-news-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  margin-bottom: 10px;
+}
+html.dark .mmo-news-header {
+  border-bottom-color: rgba(255, 255, 255, 0.15);
+}
+.mmo-news-sprite {
+  flex-shrink: 0;
+  image-rendering: pixelated;
+}
+.mmo-news-header-text { flex: 1; min-width: 0; }
+.mmo-news-title {
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 0 2px;
+  color: #1a1a1a;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+html.dark .mmo-news-title {
+  color: #e0e0e0;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+.mmo-news-subtitle {
+  font-size: 10px;
+  color: #5a7480;
+  margin: 0;
+  font-style: italic;
+}
+html.dark .mmo-news-subtitle { color: #888; }
+
+/* news entries */
+.mmo-news-entries {
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+.mmo-news-entry {
+  padding: 8px 0;
+}
+.mmo-news-entry--border {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+html.dark .mmo-news-entry--border {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+.mmo-news-date {
+  display: block;
+  font-size: 9px;
+  color: #8a9aa4;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+html.dark .mmo-news-date { color: #777; }
+.mmo-news-entry-title {
+  display: block;
+  font-size: 11px;
+  color: #1a1a1a;
+  margin-bottom: 3px;
+}
+html.dark .mmo-news-entry-title { color: #e0e0e0; }
+.mmo-news-entry-body {
+  font-size: 10px;
+  line-height: 1.5;
+  margin: 0;
+  color: #2a3540;
+}
+html.dark .mmo-news-entry-body { color: #b0b8c0; }
+.mmo-news-entry-body a {
+  color: #444;
+}
+html.dark .mmo-news-entry-body a { color: #e0e0e0; }
+
+/* quick links */
+.mmo-news-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+}
+html.dark .mmo-news-links {
+  border-top-color: rgba(255, 255, 255, 0.15);
+}
+.mmo-news-links a {
+  font-size: 10px;
+  text-decoration: none;
+  padding: 5px 8px;
+  border-radius: 3px;
+  text-align: center;
+  transition: all 0.15s;
+  color: #1a1a1a;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.1));
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+.mmo-news-links a:hover {
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.18));
+  border-color: rgba(0, 0, 0, 0.4);
+}
+html.dark .mmo-news-links a {
+  color: #d0d0d0;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+html.dark .mmo-news-links a:hover {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.08));
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* scrollbar in entries area */
+.mmo-news-entries::-webkit-scrollbar { width: 4px; }
+.mmo-news-entries::-webkit-scrollbar-track { background: transparent; }
+.mmo-news-entries::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+}
+html.dark .mmo-news-entries::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+</style>
+
+<script>
+// runtime fetch: loads fresh news-data.json and replaces the baked-in content
+// so updates are visible without running node build
+(function() {
+  var attempts = 0;
+  var poll = setInterval(function() {
+    var el = document.getElementById('mmo-news-content');
+    if (!el) {
+      if (++attempts > 60) clearInterval(poll);
+    var sprite = el.querySelector('.mmo-news-sprite');
+    if (sprite) sprite.style.display = 'none'; // stop after 30s
+      return;
+    }
+    clearInterval(poll);
+    var sprite = el.querySelector('.mmo-news-sprite');
+    if (sprite) sprite.style.display = 'none';
+    fetch('/news-data.json?v=' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(entries) {
+        if (!Array.isArray(entries) || entries.length === 0) return;
+        var max = Math.min(entries.length, 5);
+        var html = '';
+        for (var i = 0; i < max; i++) {
+          var e = entries[i];
+          var title = (e.title || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          var body = (e.body || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          // allow <a> tags in body by restoring them after escaping
+          body = body.replace(/&lt;a /g, '<a ').replace(/&lt;\/a&gt;/g, '</a>').replace(/&gt;/g, '>');
+          var date = (e.date || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+          var sep = i < max - 1 ? ' mmo-news-entry--border' : '';
+          html += '<div class="mmo-news-entry' + sep + '">'
+            + '<span class="mmo-news-date">' + date + '</span>'
+            + '<strong class="mmo-news-entry-title">' + title + '</strong>'
+            + '<p class="mmo-news-entry-body">' + body + '</p>'
+            + '</div>';
+        }
+        var entriesEl = el.querySelector('.mmo-news-entries');
+        if (entriesEl) entriesEl.innerHTML = html;
+      })
+      .catch(function() {});
+  }, 500);
+})();
+</script>
