@@ -755,60 +755,6 @@ select.select {
 }
 
 /*********************************************************
- * Team tiles
- *********************************************************/
-
-.team {
-	width: 300px;
-	min-height: 49px;
-	height: auto;
-	padding: 0;
-	white-space: nowrap;
-	overflow: hidden;
-	text-align: left;
-}
-.team strong {
-	display: block;
-	font-size: 8pt;
-	text-align: center;
-	height: 13px;
-	padding: 2px 0 0 0;
-	margin: 0;
-}
-.dark .team strong {
-	color: #ddd;
-	text-shadow: 0px -1px 0px #3b3c41;
-}
-.team strong span {
-	font-weight: normal;
-}
-.team small {
-	display: block;
-	width: 220px;
-	min-height: 30px;
-	padding: 0 0 2px;
-	margin: 0 auto;
-	white-space: normal;
-}
-.team.pc-box small {
-	width: auto;
-	padding-left: 5px;
-	padding-right: 5px;
-	min-height: 60px;
-}
-.team small .picon {
-	margin-right: -4px;
-}
-.select:disabled small {
-	opacity: 0.7;
-}
-.team em {
-	display: block;
-	text-align: center;
-	padding-top: 7px;
-}
-
-/*********************************************************
  * Table
  *********************************************************/
 
