@@ -195,6 +195,10 @@
 .teamlist li {
 	margin: 3px 0;
 	padding: 0;
+	/* lazy windowing */
+	content-visibility: auto;
+	contain-intrinsic-size: 49px;
+	contain-intrinsic-size: auto none auto 49px;
 }
 .teamlist li.cur .team {
 	opacity: 0.5;
