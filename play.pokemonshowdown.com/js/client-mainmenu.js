@@ -106,7 +106,7 @@
 						$newsEntries.eq(i).addClass('unread');
 					}
 				}
-				if (!hasUnread) self.minimizePM($news);
+				// if (!hasUnread) self.minimizePM($news);
 			});
 
 			if (!app.roomsFirstOpen && window.location.host !== 'demo.psim.us' && window.innerWidth < 630) {
