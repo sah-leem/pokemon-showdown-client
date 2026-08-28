@@ -34,9 +34,11 @@ Storage.bg = {
 	// because doing this once was annoying
 	MENU_BUTTONS: 7,
 	set: function (bgUrl, bgid, noSave) {
+		var isRandom = !bgid;
 		if (!this.load(bgUrl, bgid)) {
 			if (!bgUrl && this.resolvedUrl) { bgUrl = this.resolvedUrl; bgid = this.id; }
-			this.extractMenuColors(bgUrl, bgid, noSave);
+			this.extractMenuColors(bgUrl, bgid, noSave || isRandom);
+			if (isRandom) { try { localStorage.removeItem('showdown_bg'); } catch (e) {} }
 		} else if (bgid) {
 			try {
 				localStorage.setItem('showdown_bg', bgUrl + '\n' + bgid);
@@ -57,7 +59,7 @@ Storage.bg = {
 			if (location.host === 'smogtours.psim.us') {
 				bgid = 'shaymin';
 			} else if (location.host === Config.routes.client || location.host === 'mmoshowdown.cc' || bgid === 'waterfall') {
-				var bgs = ['absol', 'celebi', 'heatrotom', 'jirachi', 'manaphy', 'oshawott', 'popplio', 'smoochum', 'victini', 'washrotom'];
+				var bgs = ['absol', 'celebi', 'clefairy', 'darkrai', 'garchomp', 'gengar', 'heatrotom', 'jirachi', 'manaphy', 'milotic', 'mimikyu', 'oshawott', 'popplio', 'reshiram', 'shinygreninja', 'shinyinfernape', 'shinymetagross', 'shinyumbreon', 'smeargle', 'smoochum', 'snorlax', 'togepi', 'victini', 'vileplume', 'washrotom', 'xerneas', 'zekrom'];
 				bgid = bgs[Math.floor(Math.random() * bgs.length)];
 			} else {
 				$(document.body).css({
@@ -99,6 +101,18 @@ Storage.bg = {
 			case 'celebi':
 				attrib = '"Celebi" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
+			case 'clefairy':
+				attrib = '"Clefairy" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'darkrai':
+				attrib = '"Darkrai" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'garchomp':
+				attrib = '"Garchomp" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'gengar':
+				attrib = '"Gengar" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
 			case 'heatrotom':
 				attrib = '"Heat Rotom" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
@@ -108,20 +122,59 @@ Storage.bg = {
 			case 'manaphy':
 				attrib = '"Manaphy" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
+			case 'milotic':
+				attrib = '"Milotic" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'mimikyu':
+				attrib = '"Mimikyu" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
 			case 'oshawott':
 				attrib = '"Oshawott" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
 			case 'popplio':
 				attrib = '"Popplio" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
+			case 'reshiram':
+				attrib = '"Reshiram" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'shinygreninja':
+				attrib = '"Shiny Greninja" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'shinyinfernape':
+				attrib = '"Shiny Infernape" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'shinymetagross':
+				attrib = '"Shiny Metagross" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'shinyumbreon':
+				attrib = '"Shiny Umbreon" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'smeargle':
+				attrib = '"Smeargle" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
 			case 'smoochum':
 				attrib = '"Smoochum" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'snorlax':
+				attrib = '"Snorlax" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'togepi':
+				attrib = '"Togepi" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
 			case 'victini':
 				attrib = '"Victini" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
+			case 'vileplume':
+				attrib = '"Vileplume" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
 			case 'washrotom':
 				attrib = '"Wash Rotom" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'xerneas':
+				attrib = '"Xerneas" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
+				break;
+			case 'zekrom':
+				attrib = '"Zekrom" <small>background by <a href="https://ishmam.com" target="_blank" class="subtle">Ishmam Ahmed</a></small>';
 				break;
 			}
 		}
