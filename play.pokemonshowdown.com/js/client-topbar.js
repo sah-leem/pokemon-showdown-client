@@ -161,7 +161,7 @@
 			}
 		},
 		updateTabbar: function () {
-			if ($(window).width() < 420) return this.updateTabbarMini();
+			if ($(window).width() < 640) return this.updateTabbarMini();
 			this.$('.logo').show();
 			this.$('.maintabbar').removeClass('minitabbar');
 
@@ -239,7 +239,7 @@
 			for (var i in app.rooms) {
 				if (app.rooms[i] !== app.curRoom && app.rooms[i].notificationClass === ' notifying') notificationClass = ' notifying';
 			}
-			var buf = '<ul><li><a class="button minilogo' + notificationClass + '" href="' + app.root + '"><img src="' + Dex.resourcePrefix + 'favicon-256.png" width="32" height="32" alt="Pok&eacute;mon Showdown! (beta)" /><i class="fa fa-caret-down" style="display:inline-block"></i></a></li></ul>';
+			var buf = '<ul><li><a class="button minilogo' + notificationClass + '" href="' + app.root + '"><img src="/mmo-minilogo.png" width="32" height="32" alt="Pok&eacute;mon Showdown! (beta)" /><i class="fa fa-caret-down" style="display:inline-block"></i></a></li></ul>';
 
 			buf += '<ul>' + this.renderRoomTab(app.curRoom) + '</ul>';
 
@@ -868,18 +868,35 @@
 
 			buf += '</div><div style="clear:left"></div>';
 			buf += '<p><strong>Official</strong></p>';
-			buf += '<div class="bglist">';
+			buf += '<div class="bglist" style="max-height:260px;overflow-y:auto">';
 
 			buf += '<button name="setBg" value="absol" class="option' + (cur === 'absol' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-absol.jpg) center/cover no-repeat"></span>Absol</button>';
 			buf += '<button name="setBg" value="celebi" class="option' + (cur === 'celebi' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-celebi.jpg) center/cover no-repeat"></span>Celebi</button>';
+			buf += '<button name="setBg" value="clefairy" class="option' + (cur === 'clefairy' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-clefairy.jpg) center/cover no-repeat"></span>Clefairy</button>';
+			buf += '<button name="setBg" value="darkrai" class="option' + (cur === 'darkrai' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-darkrai.jpg) center/cover no-repeat"></span>Darkrai</button>';
+			buf += '<button name="setBg" value="garchomp" class="option' + (cur === 'garchomp' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-garchomp.jpg) center/cover no-repeat"></span>Garchomp</button>';
+			buf += '<button name="setBg" value="gengar" class="option' + (cur === 'gengar' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-gengar.jpg) center/cover no-repeat"></span>Gengar</button>';
 			buf += '<button name="setBg" value="heatrotom" class="option' + (cur === 'heatrotom' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-heatrotom.jpg) center/cover no-repeat"></span>Heat Rotom</button>';
 			buf += '<button name="setBg" value="jirachi" class="option' + (cur === 'jirachi' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-jirachi.jpg) center/cover no-repeat"></span>Jirachi</button>';
 			buf += '<button name="setBg" value="manaphy" class="option' + (cur === 'manaphy' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-manaphy.jpg) center/cover no-repeat"></span>Manaphy</button>';
+			buf += '<button name="setBg" value="milotic" class="option' + (cur === 'milotic' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-milotic.jpg) center/cover no-repeat"></span>Milotic</button>';
+			buf += '<button name="setBg" value="mimikyu" class="option' + (cur === 'mimikyu' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-mimikyu.jpg) center/cover no-repeat"></span>Mimikyu</button>';
 			buf += '<button name="setBg" value="oshawott" class="option' + (cur === 'oshawott' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-oshawott.jpg) center/cover no-repeat"></span>Oshawott</button>';
 			buf += '<button name="setBg" value="popplio" class="option' + (cur === 'popplio' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-popplio.jpg) center/cover no-repeat"></span>Popplio</button>';
+			buf += '<button name="setBg" value="reshiram" class="option' + (cur === 'reshiram' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-reshiram.jpg) center/cover no-repeat"></span>Reshiram</button>';
+			buf += '<button name="setBg" value="shinygreninja" class="option' + (cur === 'shinygreninja' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-shinygreninja.jpg) center/cover no-repeat"></span>Shiny Greninja</button>';
+			buf += '<button name="setBg" value="shinyinfernape" class="option' + (cur === 'shinyinfernape' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-shinyinfernape.jpg) center/cover no-repeat"></span>Shiny Infernape</button>';
+			buf += '<button name="setBg" value="shinymetagross" class="option' + (cur === 'shinymetagross' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-shinymetagross.jpg) center/cover no-repeat"></span>Shiny Metagross</button>';
+			buf += '<button name="setBg" value="shinyumbreon" class="option' + (cur === 'shinyumbreon' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-shinyumbreon.jpg) center/cover no-repeat"></span>Shiny Umbreon</button>';
+			buf += '<button name="setBg" value="smeargle" class="option' + (cur === 'smeargle' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-smeargle.jpg) center/cover no-repeat"></span>Smeargle</button>';
 			buf += '<button name="setBg" value="smoochum" class="option' + (cur === 'smoochum' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-smoochum.jpg) center/cover no-repeat"></span>Smoochum</button>';
+			buf += '<button name="setBg" value="snorlax" class="option' + (cur === 'snorlax' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-snorlax.jpg) center/cover no-repeat"></span>Snorlax</button>';
+			buf += '<button name="setBg" value="togepi" class="option' + (cur === 'togepi' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-togepi.jpg) center/cover no-repeat"></span>Togepi</button>';
 			buf += '<button name="setBg" value="victini" class="option' + (cur === 'victini' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-victini.jpg) center/cover no-repeat"></span>Victini</button>';
+			buf += '<button name="setBg" value="vileplume" class="option' + (cur === 'vileplume' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-vileplume.jpg) center/cover no-repeat"></span>Vileplume</button>';
 			buf += '<button name="setBg" value="washrotom" class="option' + (cur === 'washrotom' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-washrotom.jpg) center/cover no-repeat"></span>Wash Rotom</button>';
+			buf += '<button name="setBg" value="xerneas" class="option' + (cur === 'xerneas' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-xerneas.jpg) center/cover no-repeat"></span>Xerneas</button>';
+			buf += '<button name="setBg" value="zekrom" class="option' + (cur === 'zekrom' ? ' cur' : '') + '"><span class="bg" style="background:url(/fx/client-bg-zekrom.jpg) center/cover no-repeat"></span>Zekrom</button>';
 
 			buf += '</div><div style="clear:left"></div>';
 			buf += '<p><strong>Custom</strong></p>';
@@ -892,7 +909,7 @@
 			// April Fool's 2016 - background change disabling
 			// buf = '<p>Sorry, the background chooser is experiencing technical difficulties. Please try again tomorrow!</p><p><button name="close"><strong>Done</strong></button></p>';
 
-			this.$el.css('max-width', 448).html(buf);
+			this.$el.css('max-width', 480).html(buf);
 			this.$el.html(buf);
 		},
 		setBg: function (bgid) {
