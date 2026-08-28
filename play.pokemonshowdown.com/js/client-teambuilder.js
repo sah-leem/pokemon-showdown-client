@@ -3904,6 +3904,36 @@
 		                {s:'Groudon',b:90,e:0,n:1.0,d:'Adamant 0'},{s:'Giratina-Origin',b:90,e:0,n:1.0,d:'Modest 0'},
 		                {s:'Ferrothorn',b:20,e:0,n:0.9,d:'Relaxed 0'},
 		        ],
+				'gen5pokemmout': [
+					{s:'Accelgor',b:145,e:252,n:1.1,d:'Timid 252'},
+					{s:'Aerodactyl',b:130,e:252,n:1.1,d:'Timid 252'},
+					{s:'Swellow',b:125,e:252,n:1.1,d:'Timid 252'},
+					{s:'Dugtrio',b:120,e:252,n:1.1,d:'Timid 252'},
+					{s:'Zebstrika',b:116,e:252,n:1.1,d:'Timid 252'},
+					{s:'Whimsicott',b:116,e:252,n:1.1,d:'Timid 252'},
+					{s:'Floatzel',b:115,e:252,n:1.1,d:'Timid 252'},
+					{s:'Swoobat',b:114,e:252,n:1.1,d:'Timid 252'},
+					{s:'Purugly',b:112,e:252,n:1.1,d:'Timid 252'},
+					{s:'Archeops',b:110,e:252,n:1.1,d:'Timid 252'},
+					{s:'Magmortar',b:83,e:0,n:1,d:'Neutral 0'},
+					{s:'Gabite',b:82,e:0,n:1,d:'Neutral 0'},
+					{s:'Monferno',b:81,e:0,n:1,d:'Neutral 0'},
+					{s:'Meganium',b:80,e:0,n:1,d:'Neutral 0'},
+					{s:'Stoutland',b:80,e:0,n:1,d:'Neutral 0'},
+					{s:'Drifblim',b:80,e:0,n:1,d:'Neutral 0'},
+					{s:'Shiftry',b:80,e:0,n:1,d:'Neutral 0'},
+					{s:'Glalie',b:80,e:0,n:1,d:'Neutral 0'},
+					{s:'Grumpig',b:80,e:0,n:1,d:'Neutral 0'},
+					{s:'Vanilluxe',b:79,e:0,n:1,d:'Neutral 0'},
+					{s:'Watchog',b:77,e:0,n:1,d:'Neutral 0'},
+					{s:'Blitzle',b:76,e:0,n:1,d:'Neutral 0'},
+					{s:'Cradily',b:43,e:0,n:0.9,d:'Relaxed 0'},
+					{s:'Probopass',b:40,e:0,n:0.9,d:'Relaxed 0'},
+					{s:'Rhydon',b:40,e:0,n:0.9,d:'Relaxed 0'},
+					{s:'Beheeyem',b:40,e:0,n:0.9,d:'Relaxed 0'},
+					{s:'Wormadam',b:36,e:0,n:0.9,d:'Relaxed 0'},
+					{s:'Corsola',b:35,e:0,n:0.9,d:'Relaxed 0'}
+				],
 		},
 
 		calcSpeedStat: function (base, ev, iv, level, natureMod) {
@@ -3921,7 +3951,8 @@
 		        if (fmt.includes('pokemmolc')) return 'gen5pokemmolcou';
 		        if (fmt.includes('pokemmovgcubers')) return 'gen5pokemmovgcubers';
 		        if (fmt.includes('pokemmovgc')) return 'gen5pokemmovgc2';
-		        if (fmt.includes('pokemmoubers')) return 'gen5pokemmoubers';
+		        if (fmt.includes('pokemmout')) return 'gen5pokemmout';
+					if (fmt.includes('pokemmoubers')) return 'gen5pokemmoubers';
 		        if (fmt.includes('pokemmouu')) return 'gen5pokemmouu';
 		        if (fmt.includes('pokemmonu')) return 'gen5pokemmonu';
 		        if (fmt.includes('pokemmoou')) return 'gen5pokemmoou';
@@ -3938,6 +3969,7 @@
 		        if (key.includes('ubers')) return 'Ubers';
 		        if (key.includes('uu')) return 'UU';
 		        if (key.includes('nu')) return 'NU';
+		        if (key.endsWith('ut')) return 'UT';
 		        return 'OU';
 		},
 
