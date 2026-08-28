@@ -68,6 +68,7 @@
 			'change select[name=ivspread]': 'ivSpreadChange',
 			'change .evslider': 'statSlided',
 			'input .evslider': 'statSlide',
+			'input #speedtiers-search': 'speedTierSearch',
 
 			// teambuilder events
 			'click .utilichart a': 'chartClick',
@@ -1589,7 +1590,7 @@
 		        function getEff(atkType, defTypes, ability) {
 		                var mult = 1;
                         var abilityId = toID(ability);
-                                                if (abilityId === 'levitate' && atkType === 'Ground') return 0;
+                        if (abilityId === 'levitate' && atkType === 'Ground') return 0;
                         if (abilityId === 'flashfire' && atkType === 'Fire') return 0;
                         if ((abilityId === 'waterabsorb' || abilityId === 'stormdrain' || abilityId === 'dryskin') && atkType === 'Water') return 0;
                         if ((abilityId === 'voltabsorb' || abilityId === 'lightningrod' || abilityId === 'motordrive') && atkType === 'Electric') return 0;
@@ -1602,25 +1603,21 @@
 		                        else if (val === 2) mult *= 0.5;
 		                        else if (val === 3) mult *= 0;
 		                }
-		                // Gen 5: Steel resists Dark and Ghost
-		                if (atkType === 'Dark' || atkType === 'Ghost') {
-		                        for (var j = 0; j < defTypes.length; j++) { if (defTypes[j] === 'Steel') mult *= 0.5; }
-		                }
 		                return mult;
 		        }
 		        
 		        // build table
 		        var buf = "<style>";
-		        buf += '#tc-grid{width:100%;border-collapse:collapse;font-family:Verdana,sans-serif;font-size:11px}';
+		        buf += '#tc-grid{width:100%;border-collapse:collapse;font-family:Verdana,Geneva,sans-serif;font-size:11px}';
 		        buf += '#tc-grid th{padding:4px 2px;font-size:9px;color:#fff;font-family:Verdana,Geneva,sans-serif;text-align:center;font-weight:normal;border-bottom:1px solid rgba(128,128,128,.2)}';
-		        buf += '#tc-grid td{padding:4px 3px;text-align:center;font-size:12px;font-weight:bold;vertical-align:middle;border-bottom:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(128,128,128,.1)}';
+		        buf += '#tc-grid td{padding:4px 3px;text-align:center;font-size:12px;font-weight:bold;vertical-align:middle;border-bottom:1px solid rgba(128,128,128,.1)}';
 		        buf += '#tc-grid td img{vertical-align:middle;display:inline-block}#tc-grid tr:hover td{background:rgba(128,128,128,.08)}';
 		        buf += '.tc-4x{background:rgba(192,50,40,.75);color:#fff;font-weight:bold}';
 		        buf += '.tc-2x{background:rgba(192,50,40,.45);color:inherit}';
 		        buf += '.tc-half{background:rgba(39,174,96,.45);color:inherit}';
 		        buf += '.tc-quarter{background:rgba(39,174,96,.7);color:inherit;font-weight:bold}';
 		        buf += '.tc-immune{background:rgba(80,80,80,.8);color:#fff;font-weight:bold}';
-		        buf += '.tc-neutral{opacity:0.15}';
+		        buf += '.tc-neutral{opacity:0.25}';
 		        buf += '.tc-weak{color:#e55;font-weight:bold;font-size:13px}.tc-resist{color:#5b5;font-weight:bold;font-size:13px}.tc-zero{opacity:0.4}';
 		        buf += '</style>';
 		        
@@ -2227,6 +2224,7 @@
 			this.$chart.find('select[name=nature]').val(set.nature || 'Serious');
 			this.checkStatOptimizations();
 			this.updateSpeedTiers();
+			this.setupBoostButtons();
 		},
 		curChartType: '',
 		curChartName: '',
@@ -2326,13 +2324,15 @@
 		        return 'https://mmoshowdown.com/dex/pokemon/' + name + '/';
 		},
 		updateStatForm: function (setGuessed) {
+                        this.speedTierCompare = [];
+                        this.statBoosts = {hp:0,atk:0,def:0,spa:0,spd:0,spe:0};
 			var buf = '';
 			var set = this.curSet;
 			var species = this.curTeam.dex.species.get(this.curSet.species);
 
 			var baseStats = species.baseStats;
 
-			buf += '<div class="resultheader"><h3>EVs</h3></div>';
+			buf += '<div class="resultheader"><h3>EVs, IVs, Nature, and Speed Tiers</h3></div>';
 			buf += '<div class="statform">';
 			var guess = new BattleStatGuesser(this.curTeam.format).guess(set);
 			var role = guess.role;
@@ -2595,7 +2595,7 @@
 				}
 				buf += '</select></p>';
 
-				buf += '<div id="speedtiers" style="clear:both;margin-top:4px"></div>';
+				buf += '<div id="speedtiers-wrapper" style="clear:both;margin-top:4px"><div id="speedtiers-search-wrap" style="display:none;margin-bottom:4px"><input type="text" id="speedtiers-search" class="textbox" placeholder="Compare with..." style="width:100%;padding:3px 6px;font-size:10px;font-family:Verdana,sans-serif" autocomplete="off" /></div><div id="speedtiers"></div></div>';
 
 				buf += '<p id="statoptimizer"></p>';
 			}
@@ -2604,6 +2604,7 @@
 			this.$chart.html(buf);
 			this.checkStatOptimizations();
 			this.updateSpeedTiers();
+			this.setupBoostButtons();
 		},
 		setStatFormGuesses: function () {
 			this.updateStatForm(true);
@@ -3940,6 +3941,21 @@
 		        return 'OU';
 		},
 
+		speedTierSearch: function (e) {
+		        var val = e.currentTarget.value.trim();
+		        if (!val) { this.speedTierCompare = []; this.updateSpeedTiers(); return; }
+		        var parts = val.split(',');
+		        var found = [];
+		        for (var ci = 0; ci < parts.length; ci++) {
+		                var pname = parts[ci].trim();
+		                if (!pname) continue;
+		                var sp = this.curTeam.dex.species.get(pname);
+		                if (sp && sp.exists) found.push(sp);
+		        }
+		        this.speedTierCompare = found;
+		        this.updateSpeedTiers();
+		},
+
 		updateSpeedTiers: function () {
 		        var $container = this.$chart.find('#speedtiers');
 		        if (!$container.length) return;
@@ -3951,12 +3967,15 @@
 		        if (this.curTeam.format && this.curTeam.format.includes('pokemmolc')) level = 5;
 		        else if (this.curTeam.format && this.curTeam.format.includes('pokemmo')) level = 50;
 		        var mySpeed = this.getStat('spe', set);
+		        if (this.statBoosts && this.statBoosts.spe > 0) mySpeed = Math.floor(mySpeed * (2 + this.statBoosts.spe) / 2);
+		        else if (this.statBoosts && this.statBoosts.spe < 0) mySpeed = Math.floor(mySpeed * 2 / (2 + Math.abs(this.statBoosts.spe)));
 		        var fmtKey = this.getFormatSpeedKey();
 		        var benchmarks = this.speedTierData[fmtKey] || [];
 		        var fmtLabel = this.getFormatLabel(fmtKey);
 		        var entries = [];
 		        for (var i = 0; i < benchmarks.length; i++) {
-		                var bm = benchmarks[i];
+		                if (this.speedTierCompare && this.speedTierCompare.length) continue;
+                        var bm = benchmarks[i];
 		                if (bm.s !== species.name) entries.push({ species: bm.s, speed: this.calcSpeedStat(bm.b, bm.e, 31, level, bm.n), detail: bm.d, self: false });
 		        }
 		        var spdEv = (set.evs && set.evs.spe) || 0;
@@ -3964,6 +3983,17 @@
 		        var natLabel = '';
 		        if (nature.plus === 'spe') natLabel = '+';
 		        else if (nature.minus === 'spe') natLabel = '\u2212';
+		        // Add comparison Pokemon entries
+		        if (this.speedTierCompare && this.speedTierCompare.length) {
+		                var maxEv = level === 5 ? 236 : 252;
+		                for (var xi = 0; xi < this.speedTierCompare.length; xi++) {
+		                        var cmp = this.speedTierCompare[xi];
+		                        if (cmp.name === species.name) continue;
+		                        var cmpBase = cmp.baseStats.spe;
+		                        entries.push({ species: cmp.name, speed: this.calcSpeedStat(cmpBase, 0, 31, level, 1.0), detail: 'Neutral 0', self: false, compare: true });
+		                        entries.push({ species: cmp.name, speed: this.calcSpeedStat(cmpBase, maxEv, 31, level, 1.1), detail: '+Spe ' + maxEv, self: false, compare: true });
+		                }
+		        }
 		        entries.push({ species: species.name, speed: mySpeed, detail: natLabel + ' ' + spdEv + ' EVs', self: true });
 		        entries.sort(function (a, b) {
 		                if (b.speed !== a.speed) return b.speed - a.speed;
@@ -3972,14 +4002,16 @@
 		        var selfIdx = 0;
 		        for (var i = 0; i < entries.length; i++) { if (entries[i].self) { selfIdx = i; break; } }
 		        var buf = '<div style="border-top:1px solid rgba(128,128,128,.25);padding-top:4px">';
+		        
+		        
 		        buf += '<style>#speedtiers-scroll::-webkit-scrollbar{display:none}</style>';
-		        buf += '<p style="margin:0 0 4px;opacity:0.6;font-size:10px"><strong>Speed tiers</strong>';
+		        buf += '<p style="margin:0 0 4px;font-size:14px"><strong>Speed tiers</strong>';
 		        buf += ' <small>(' + BattleLog.escapeHTML(fmtLabel) + ' \u00b7 Lv' + level + ')</small></p>';
 		        buf += '<div id="speedtiers-scroll" style="max-height:400px;overflow-y:auto;scrollbar-width:none;-ms-overflow-style:none">';
 		        for (var i = 0; i < entries.length; i++) {
 		                var e = entries[i];
-		                var bg = e.self ? 'background:rgba(74,144,217,.15);border-left:2px solid #4a90d9;margin:0 -4px;padding:2px 8px;' : '';
-		                var nc = e.self ? 'color:#4a90d9;font-weight:bold' : '';
+		                var bg = e.self ? 'background:rgba(74,144,217,.15);border-left:2px solid #4a90d9;margin:0 -4px;padding:2px 8px;' : e.compare ? 'background:rgba(255,165,0,.15);border-left:2px solid #f0a030;margin:0 -4px;padding:2px 8px;' : '';
+		                var nc = e.self ? 'color:#4a90d9;font-weight:bold' : e.compare ? 'color:#f0a030;font-weight:bold' : '';
 		                buf += '<div' + (e.self ? ' id="speedtiers-self"' : '') + ' style="display:flex;align-items:center;padding:2px 4px;font-size:11px;' + bg + '">';
 		                buf += '<span style="display:inline-block;width:40px;height:30px;' + Dex.getPokemonIcon(e.species) + '"></span>';
 		                buf += '<span style="flex:1;' + nc + '">' + BattleLog.escapeHTML(e.self ? e.species + ' \u25c0' : e.species) + '</span>';
@@ -3989,11 +4021,70 @@
 		        }
 		        buf += '</div></div>';
 		        $container.html(buf);
+                        this.$chart.find('#speedtiers-search-wrap').show();
 		        var scrollEl = document.getElementById('speedtiers-scroll');
 		        var selfEl = document.getElementById('speedtiers-self');
 		        if (scrollEl && selfEl) {
 		                scrollEl.scrollTop = selfEl.offsetTop - scrollEl.offsetTop - (scrollEl.clientHeight / 2) + (selfEl.offsetHeight / 2);
 		        }
+		        
+		        if (false) {
+		                searchInput.focus();
+		                searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+		        }
+		},
+
+		setupBoostButtons: function () {
+		        if (!this.statBoosts) this.statBoosts = {hp:0,atk:0,def:0,spa:0,spd:0,spe:0};
+		        var self = this;
+		        
+		        // Update displayed stat values with boosts
+		        var $statscol = this.$chart.find('.statscol');
+		        if (!$statscol.length) return;
+		        var statOrder = ['hp','atk','def','spa','spd','spe'];
+		        var $statDivs = $statscol.children('div');
+		        for (var si = 1; si < $statDivs.length && si <= statOrder.length; si++) {
+		                var stat = statOrder[si - 1];
+		                if (stat === "hp") continue;
+		                var $b = $($statDivs[si]).find("b");
+		                if (!$b.length) continue;
+		                var raw = this.getStat(stat);
+		                var boost = this.statBoosts[stat] || 0;
+		                var display = raw;
+		                if (boost > 0) display = Math.floor(raw * (2 + boost) / 2);
+		                else if (boost < 0) display = Math.floor(raw * 2 / (2 + Math.abs(boost)));
+		                if (boost > 0) { $b.text(display).css("color", "#4a90d9"); }
+		                else if (boost < 0) { $b.text(display).css("color", "#e55"); }
+		                else { $b.text(display).css("color", ""); }
+		        }
+		        
+		        // Add dropdown selects to evcol (left of EV inputs)
+		        var $evcol = this.$chart.find('.graphcol');
+		        if (!$evcol.length) return;
+		        $evcol.find('.boost-select').remove();
+		        var $evDivs = $evcol.children('div');
+		        for (var ei = 1; ei < $evDivs.length && ei <= statOrder.length; ei++) {
+		                var stat = statOrder[ei - 1];
+		                if (stat === "hp") continue;
+		                var $div = $($evDivs[ei]);
+		                var boost = this.statBoosts[stat] || 0;
+		                var sel = '<select class="boost-select" data-stat="' + stat + '" style="width:38px;font-size:9px;padding:0 1px;height:20px;vertical-align:middle;margin-right:2px;margin-top:-27px;background:#333;border:1px solid #555;border-radius:2px;color:' + (boost > 0 ? '#4a90d9' : boost < 0 ? '#e55' : 'inherit') + '">';
+		                for (var b = 6; b >= -6; b--) {
+		                        var label = b === 0 ? '--' : (b > 0 ? '+' + b : '' + b);
+		                        sel += '<option value="' + b + '"' + (b === boost ? ' selected' : '') + '>' + label + '</option>';
+		                }
+		                sel += '</select>';
+		                $div.append(sel);
+		        }
+		        
+		        // Bind change handler (delegated)
+		        this.$chart.off("change.boost").on("change.boost", ".boost-select", function(e) {
+		                var stat = $(this).data("stat");
+		                var val = parseInt($(this).val());
+		                self.statBoosts[stat] = val;
+		                self.setupBoostButtons();
+		                if (stat === "spe") self.updateSpeedTiers();
+		        });
 		},
 
 		getStat: function (stat, set, evOverride, natureOverride) {
